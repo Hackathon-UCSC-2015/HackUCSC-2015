@@ -14,45 +14,23 @@ var wss = new WebSocketServer({port:8080});
 //uuid
 var uuid = require('node-uuid');
 
-//var cal = require('./calendar.js');
-//var data = cal.getCalData();
-//console.log(data.name +'\n'+data.startTime +'\n'+data.endTime);
 
+var cal = require('./calendar.js'); //used to load calendar data
 
-
-
-
-
-
-
-
-
-
-
-
-//=========================================================
-
-///
-//var cal = require('./calendar.js');
-
-///
-
+/*
+	Used to authenticate with google Oauth2
+*/
 var gstrat = require('passport-google-oauth').OAuth2Strategy;
 var passport = require('passport');
-var gcal = require('google-calendar');
+var auth = require('./authentication.js'); //The authentication information for a google login
 
-//app.use(express.session({secret: "test"}));
-app.use(passport.initialize());
-app.use(passport.session({secret: 'test', 
+
+app.use(passport.initialize());		
+app.use(passport.session({secret: 'test',     //This might be changed, passport persistent session
 	cookie: {secure: true}
 }));
 
-//var clientId ='150705574355-54aapich5dkqr7gts5j9rolh96h87fll.apps.googleusercontent.com';
-//var clientSecret = 'Lh8PNvlR8515OckCtXNnNN68'; //it is smart to keep private keys in public repos
-
-var auth = require('./authentication.js');
-
-//var gc = new gcal.GoogleCalendar(accessToken);
+//Google login, called when user clicks login button. Redirects to google login
 app.get(auth.google.login, 
 	passport.authenticate('google', 
 		{scope: ['openid',
@@ -60,6 +38,7 @@ app.get(auth.google.login,
 	function(req,res){}
 );
 
+//Google login callback, google will send back information here on a succesful callback
 app.get(auth.google.loginCallback,
 	passport.authenticate('google', 
 		{successRedirect: '/',					//Back to main page
@@ -67,6 +46,7 @@ app.get(auth.google.loginCallback,
 	function(req, res){}
 );
 
+//Information from google login request
 var request = function(accessToken, refreshToken, profile, done)
 {
     console.log("test");
@@ -78,14 +58,13 @@ var request = function(accessToken, refreshToken, profile, done)
 	    console.log("Email: "+profile.emails);
 	    console.log("Access Token: "+accessToken);
         
-        //cal.getGoogleCalendarData(accessToken);
+        cal.getGoogleCalendarData(accessToken);
         
 	    return done(null, profile);
-            
-	    //return done(null, profile);
 	});
 };
 
+//Called when we attempt to authenticate through google with passport
 passport.use(
 	new gstrat(
 	{
@@ -111,15 +90,6 @@ passport.deserializeUser(function(obj, done)
 	console.log("\ndeserialize\n");
 	done(null, obj);
 });
-
-
-
-//===============================================================
-
-
-
-
-
 
 User = function(wsID){
     this.socketID = wsID;
