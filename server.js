@@ -193,11 +193,10 @@ var serverFunctions = { //functions for various commands
         } else { //else we're overwriting a currently saved event
             var event = group.events[decoded.data.id];
             group.events[decoded.data.id] = decoded.data; //replace our old event
-            getSocket(user).send(JSON.stringify({type: "SAVE_EVENT",
-                                                 data: decoded.data}));
-            broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
-                                                       data: decoded.data}), user);
         }
+        getSocket(user).send(JSON.stringify({type: "SAVE_EVENT",
+                                                 data: decoded.data}));
+        broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",                                                   data: decoded.data}), user);
     },
     "DELETE_EVENT": function(decoded, user){
 
