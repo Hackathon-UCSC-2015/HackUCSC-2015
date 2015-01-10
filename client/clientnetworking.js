@@ -30,6 +30,12 @@ var serverFunctions = { //functions for various commands
     "LIST_EVENTS": function(decoded){
         
     },
+    "LIST_SCHEDULES": function(decoded){
+        
+    },
+    "LIST_GROUPS": function(decoded){
+
+    },
     "ADD_COMMENT": function(decoded){
         
     }
