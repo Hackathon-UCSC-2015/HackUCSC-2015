@@ -16,72 +16,108 @@ var wss = new WebSocketServer({port:8080});
 //console.log(data.name +'\n'+data.startTime +'\n'+data.endTime);
 
 
+
+
+
+
+
+
+
+
+
+
+
 //=========================================================
 
+///
+//var cal = require('./calendar.js');
 
+///
 
 var gstrat = require('passport-google-oauth').OAuth2Strategy;
 var passport = require('passport');
 var gcal = require('google-calendar');
 
+//app.use(express.session({secret: "test"}));
 app.use(passport.initialize());
-app.use(passport.session({secret: "test"}));
+app.use(passport.session({secret: 'test', 
+	cookie: {secure: true}
+}));
 
-var clientId ='150705574355-54aapich5dkqr7gts5j9rolh96h87fll.apps.googleusercontent.com';
-var clientSecret = 'Lh8PNvlR8515OckCtXNnNN68';
+//var clientId ='150705574355-54aapich5dkqr7gts5j9rolh96h87fll.apps.googleusercontent.com';
+//var clientSecret = 'Lh8PNvlR8515OckCtXNnNN68'; //it is smart to keep private keys in public repos
+
+var auth = require('./authentication.js');
 
 //var gc = new gcal.GoogleCalendar(accessToken);
-app.get('/auth/google', 
+app.get(auth.google.login, 
 	passport.authenticate('google', 
 		{scope: ['openid',
 		'https://www.googleapis.com/auth/calendar']}), 
 	function(req,res){}
 	);
 
-app.get('/auth/google/callback',
-	passport.authenticate('google', {successRedirect: '/',failureRedirect: '/fail'}),
-	function(req, res){
-	    console.log("/auth/google/callback");
-	}
-       );
+app.get(auth.google.loginCallback,
+	passport.authenticate('google', 
+		{successRedirect: '/',					//Back to main page
+		failureRedirect: auth.google.login}),	//Retry login. Perhapse this should do something else
+	function(req, res){}
+	);
 
 var request = function(accessToken, refreshToken, profile, done)
 {
-    console.log("test");
-    process.nextTick(
-	function()
-	{
-	    console.log('here');
-	    console.log("User Id: "+profile.id);
-	    console.log("Display Name: "+profile.displayName);
-	    console.log("Email: "+profile.emails);
-	    console.log("Access Token: "+accessToken);
-            
-	    return done(null, profile);
-            
-	    //return done(null, profile);
-	});
-    
+	console.log("test");
+	process.nextTick(
+		function()
+		{
+			console.log('here');
+			console.log("User Id: "+profile.id);
+			console.log("Display Name: "+profile.displayName);
+			console.log("Email: "+profile.emails);
+			console.log("Access Token: "+accessToken);
+
+			//cal.getGoogleCalendarData(accessToken);
+
+			return done(null, profile);
+
+		//return done(null, profile);
+		});
+	
 };
 
 passport.use(
-    new gstrat(
+	new gstrat(
 	{
-	    clientID: clientId,
-	    clientSecret: clientSecret,
-	    callbackURL: 'http://localhost:3000/auth/google/callback',
+		clientID: auth.google.clientId,
+		clientSecret: auth.google.clientSecret,
+		callbackURL: auth.google.callbackURL,
 	},
 	request
-    )
+	)
 );
 
-passport.serializeUser(function(user, done) {
-done(null, user);
+passport.serializeUser(function(user, done) 
+{
+	console.log("\nserialize\n");
+	console.log(user);
+	console.log('\n\n');
+	//console.log(done);
+	done(null, user);
+});
+
+passport.deserializeUser(function(obj, done)
+{
+	console.log("\ndeserialize\n");
+	done(null, obj);
 });
 
 
 
 //===============================================================
+
+
+
+
 
 
 
