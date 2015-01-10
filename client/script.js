@@ -62,6 +62,7 @@ function displayEvent(eventID) {
     $('#eventDetails > span').html(data.miniDescription);
     $('#description').html(data.description);
     $('#eventDetails > img').attr('src','images/'+data.imageName);
+	$('#saveButton').hide();
     if(data.editing) {
         $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
         $('#eventDetails > h2').get(0).addEventListener('input', headerCallback);
@@ -69,6 +70,7 @@ function displayEvent(eventID) {
         $('#eventDetails > span').get(0).addEventListener('input', miniDescriptionCallback);
         $('#description').html(data.description).prop('contentEditable', true);
         $('#eventDetails > img').attr('src','images/'+data.imageName);
+		$('#saveButton').show();
     }
 }
 
@@ -81,7 +83,6 @@ function newEventSidebarFromData(newEventData) {
         newEvent.addClass('selected');
         currentlyViewing = newEvent.attr("codeID");
         displayEvent(newEvent.attr('codeID'));
-		$('#saveButton').show();
     });
     newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
     newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));stopEditing();});
