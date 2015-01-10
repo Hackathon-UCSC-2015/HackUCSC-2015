@@ -8,7 +8,7 @@
     width:300px;
     height: 100%;
 	margin-top:50px;
-    
+    position: relative;
 }
 
 #header {
@@ -22,4 +22,9 @@
 
 #eventTemplate {
     display: none;
+}
+
+.plusbutton {
+    position: absolute;
+    bottom: 0px;
 }
