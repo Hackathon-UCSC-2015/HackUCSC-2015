@@ -187,7 +187,7 @@ wss.on('connection', function(ws){
         ws.connectionClosed = true;
         console.log("User "+ws.IDNumber+" quit");
     });
-    ws.IDNumber = globalGroup.length;
+    ws.IDNumber = globalGroup.users.length;
     globalGroup.users.push(ws); //add the user to the global userlist
 });
 
