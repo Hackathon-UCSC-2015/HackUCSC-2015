@@ -26,8 +26,13 @@ function eventSidebarElementByID(id) {
 }
 
 function prepareNewEvent(event) {
-    var data = getDataByID(event.prop('codeID'));
+    var data = eventDataByID(event.prop('codeID'));
     $('#eventDetails > h2').html(data.title).prop('contentEditable', true);
+    $('#eventDetails > h2').get(0).addEventListener('input', function() {
+        data.title = $('#eventDetails > h2').html();
+        console.log(data.title);
+        eventSidebarElementByID(data.id).children('.eventTitle').html = data.title;
+    });
     $('#eventDetails > span').html(data.miniDescription).prop('contentEditable', true);
     $('#description').html(data.description).prop('contentEditable', true);
 	$('#eventDetails > img').attr('src','images/sampleEvent0.jpg');
