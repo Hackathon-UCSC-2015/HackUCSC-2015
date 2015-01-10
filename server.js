@@ -12,6 +12,7 @@ var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({port:8080});
 
 var serverFunctions = { //functions for various commands
+    ""
 };
 
 wss.on('connection', function(ws){
@@ -24,4 +25,3 @@ wss.on('connection', function(ws){
         fn && fn(decoded); //run the function if we find it in our table
     });
 });
-
