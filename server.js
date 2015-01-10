@@ -125,9 +125,10 @@ var serverFunctions = { //functions for various commands
     //gets an event from a client and assigns it an id, saves it in eventList
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded, ws){
-        decoded.data.id = events.length;
+        var group = getGroup(decoded.data.groupID);
+        decoded.data.id = group.events.length;
         events.push(decoded.data);
-        broadcast(getGroup(decoded.data.groupID),
+        broadcast(group,
                   JSON.stringify({type: "SAVE_EVENT",
                                   data: decoded.data}));
     },
