@@ -231,8 +231,8 @@ div[contenteditable] {
 	text-shadow: 1px 2px #009900;
 	position:fixed;
 	width: -webkit-calc(50% - 330px); 
-	width: -moz-calc(50% - 330px); 
-	left: -mox-calc(100% - 510px);
+	width:    -moz-calc(50% - 330px); 
+	left:    -mox-calc(100% - 510px);
 	left: -webkit-calc(100% - 510px);
 	text-align:right;
 	bottom:40px;
@@ -242,7 +242,7 @@ div[contenteditable] {
 	text-shadow: 1px 2px #990000;
 	position:fixed;
 	width: -webkit-calc(50% - 330px); 
-	width: -moz-calc(50% - 330px); 
+	width:    -moz-calc(50% - 330px); 
 	right:0px;
 	text-align:left;
 	bottom:40px;
