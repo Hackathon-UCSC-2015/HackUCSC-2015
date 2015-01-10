@@ -63,6 +63,9 @@ var serverFunctions = { //functions for various commands
     "EXIT_GROUP": function(decoded, ws){
         
     },
+    "MAKE_GROUP": function(decoded, ws){
+
+    },
     "LIST_EVENTS": function(decoded, ws){
         ws.send(JSON.stringify({type: "LIST_EVENTS",
                                 data: eventList}));
