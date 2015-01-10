@@ -64,3 +64,16 @@ body{
 .selected {
     background-color: lightblue;
 }
+
+#eventDetails {
+	position:fixed;
+	width:500px;
+	height:500px;
+	bottom:0px;
+	right:0px;
+	z-index:3;
+	height: -webkit-calc(100% - 50px); 
+	height: -moz-calc(100% - 50px); 
+	width: -webkit-calc(100% - 300px); 
+	width: -moz-calc(100% - 300px); 
+}
