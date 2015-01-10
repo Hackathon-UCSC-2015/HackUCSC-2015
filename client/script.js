@@ -35,7 +35,7 @@ function prepareNewEvent(event) {
     });
     $('#eventDetails > span').html(data.miniDescription).prop('contentEditable', true);
     $('#description').html(data.description).prop('contentEditable', true);
-	$('#eventDetails > img').attr('src','images/sampleEvent0.jpg');
+	$('#eventDetails > img').attr('src','images/'+data.imageName);
 }
 
 $(document).ready(function() {
