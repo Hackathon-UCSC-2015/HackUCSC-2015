@@ -133,8 +133,8 @@ $(document).ready(function() {
     });
     
     $('#saveButton').click(function() {
-        var startDate = $('#startDate').datepick('getDate')[0];
-        var endDate = $('#endDate').datepick('getDate')[0];
+        var startDate = getDate('#startDate');
+        var endDate = getDate('#endDate');
         var data = eventDataByID(currentlyViewing);
         data.startTime.setFullYear(startDate.getFullYear());
         data.startTime.setMonth(startDate.getMonth());
@@ -187,3 +187,13 @@ $(document).ready(function() {
     
     
 });
+
+function getDate(date) {
+    var ret = $(date).datepick('getDate')[0];
+    if(ret === undefined) {
+        ret = new Date($(date).val());
+        if(ret === undefined)
+            ret = new Date();
+    }
+    return ret;
+}
