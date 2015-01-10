@@ -1,3 +1,17 @@
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+} 
+
 var events = [];
 var currentlyViewing = "";
 var editing = false;
@@ -35,6 +49,7 @@ var headerCallback = function() {
         eventSidebarElementByID(data.id).children('.eventTitle').html(data.name);
     }
 }
+
 
 var miniDescriptionCallback = function() {
     var data = eventDataByID(currentlyViewing);
@@ -140,13 +155,13 @@ function newEventSidebarFromData(newEventData) {
 }
 
 function denyEvent(){
-	eventDataByID(currentlyViewing).attendance = 2;
+	eventDataByID(currentlyViewing).attending = 2;
     syncSideBarWithData(currentlyViewing);
 	save(currentlyViewing);
 }
 
 function confirmEvent(){
-	eventDataByID(currentlyViewing).attendance = 1;
+	eventDataByID(currentlyViewing).attending = 1;
     syncSideBarWithData(currentlyViewing);
 	save(currentlyViewing);
 }
@@ -155,10 +170,10 @@ $(document).ready(function() {
     $('#addEvent').click(function() {
         var newEventData = {};
         newEventData.id = "c"+idCounter++;
-        newEventData.name = "Event Title";
-        newEventData.miniDescription = "Mini Description";
+        newEventData.name = getName();
+        newEventData.miniDescription = getContent();
         newEventData.description = "Enter a long description here";
-		newEventData.imageName = "sampleImages/sampleEvent"+Math.floor(Math.random()*15)+".jpg";
+		newEventData.imageName = "sampleImages/sampleEvent"+Math.floor(Math.random()*18)+".jpg";
         newEventData.groupID = 0;
         newEventData.editing = true;
         newEventData.startTime = new Date();

@@ -127,8 +127,8 @@ body{
 	margin:10px;
 }
 #eventImageImage {
-	width:150px;
-	height:150px;
+	width:200px;
+	height:200px;
 }
 .editable {
 	
@@ -253,4 +253,14 @@ div[contenteditable] {
     float: right;
 	position:relative;
 	top:-110px;
+}
+#usernameBox {
+	position:absolute;
+	top:0px;
+	right:0px;
+	height:50px;
+	width:500px;
+	text-align:right;
+	padding-top:15px;
+	padding-right:30px;
 }

@@ -27,6 +27,11 @@ var serverFunctions = { //functions for various commands
         currentlyViewing = eventData.id;
         stopEditing();
     },
+    "GOOGLE_ID_LOGIN": function(decoded) {
+        console.log(decoded);
+        $('#loginButton').hide();
+        
+    },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded){
     },
@@ -58,6 +63,14 @@ socket.onopen = function() {
     packet.type = "LIST_EVENTS";
     socket.send(JSON.stringify(packet));
     console.log("Sent LIST_EVENTS");
+    
+    var googleid = getUrlParameter("clientid");
+    if(googleid != undefined) {
+        var packet = {};
+        packet.type = "GOOGLE_ID_LOGIN";
+        packet.data = googleid;
+        socket.send(JSON.stringify(packet));
+    }
 }
 
 socket.onmessage = function(event) {
@@ -75,7 +88,6 @@ function save(id) {
     var packet = {};
     packet.type = "SAVE_EVENT";
     stopEditing();
-    packet.data = eventDataByID(id);
-	console.log(JSON.stringify(packet));
+    packet.data = eventDataByID(id)
     socket.send(JSON.stringify(packet));
 }
