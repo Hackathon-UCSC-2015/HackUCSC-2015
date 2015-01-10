@@ -144,7 +144,7 @@ function broadcast(group, data){
     });
 }
 
-function broadcastAllBut(group, data, ws) {
+function broadcastAllBut(group, data, ws){
     group.users.forEach(function(client){
         if (!client.connectionClosed && client != ws){
             client.send(data);
@@ -153,7 +153,7 @@ function broadcastAllBut(group, data, ws) {
 }
 
 function getGroup(ID){
-    return groups[ID];
+    return groups[parseInt(ID)];
 }
 
 var serverFunctions = { //functions for various commands
@@ -161,19 +161,21 @@ var serverFunctions = { //functions for various commands
     //string to the user who requested it
     "LOAD_EVENT": function(decoded, ws){
         ws.send(JSON.stringify({type: "LOAD_EVENT",
-                                data: events[decoded.data]}));
+                                data: getGroup(decoded.data.groupID).events[decoded.data.id]}));
     },
     //gets an event from a client and assigns it an id, saves it in eventList
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded, ws){
         var group = getGroup(decoded.data.groupID);
-        decoded.data.id = group.events.length;
-        events.push(decoded.data);
-        group.events.push(decoded.data);
+        if (decoded.data.id[0] == 'c'){ //if it's a client id
+            decoded.data.id = group.events.length; //assign an id
+            events.push(decoded.data); 
+            group.events.push(decoded.data);
+        }
         ws.send(JSON.stringify({type: "SAVE_EVENT",
-                                  data: decoded.data}));
+                                data: decoded.data}));
         broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
-                                  data: decoded.data}), ws);
+                                               data: decoded.data}), ws);
         
     },
     //the same as above except for schedules
@@ -189,19 +191,26 @@ var serverFunctions = { //functions for various commands
                                 data: decoded.data}));
     },
     "ENTER_GROUP": function(decoded, ws){
-        
+        pushOnlyOne(getGroup(decoded.data).users, ws); //add the user if they're not already part of the group
     },
     "EXIT_GROUP": function(decoded, ws){
+        getGroup(decoded.data).users = 
+            getGroup(decoded.data).users.filter(function(user){
+                return user !== ws;
+            });
+    },
+    "SAVE_GROUP": function(decoded, ws){
         
     },
-    "MAKE_GROUP": function(decoded, ws){
-
+    "LOAD_GROUP": function(decoded, ws){
+        ws.send(JSON.stringify({type: "LOAD_GROUP",
+                                data: groups[decoded.data]}));
     },
     "LIST_EVENTS": function(decoded, ws){
         //Give the user all current events
         events.forEach(function(event) {
             ws.send(JSON.stringify({type: "LOAD_EVENT",
-                                data: event}));
+                                    data: event}));
         });
     },
     "LIST_SCHEDULES": function(decoded, ws){
@@ -214,7 +223,10 @@ var serverFunctions = { //functions for various commands
     },
     "ADD_COMMENT": function(decoded, ws){
         
-    }
+    },
+    "OVERWRITE_SCHEDULE": function(decoded, ws){
+
+    },
 };
 
 wss.on('connection', function(ws){
@@ -242,7 +254,8 @@ wss.on('connection', function(ws){
 function safeUsers(group){
     return group.users.map(function(ws){
         return {IDNumber: ws.IDNumber,
-                connectionClosed: ws.connectionClosed};
+                connectionClosed: ws.connectionClosed,
+                name: ws.name};
     });
 }
 
@@ -258,17 +271,18 @@ function saveAllData(){
     });
     fs.writeFileSync(__dirname+'/server_files/data',
                      JSON.stringify({
-                         events1: events,
-                         schedules1: schedules,
-                         groups1: newgroups}));
+                         events: events,
+                         schedules: schedules,
+                         groups: newgroups}));
     console.log('Saved all data.');
 }
 
+//this is basically pointless right now without anything to get it working
 function loadAllData(){
     var data = JSON.parse(readFileSync(__dirname+'/server_files/data', 'utf8'));
-    events = data.events1;
-    schedules = data.schedules1;
-    groups = data.groups1; //make this work
+    events = data.events;
+    schedules = data.schedules;
+    groups = data.groups;
 }
 
 function pushOnlyOne(array, value){
