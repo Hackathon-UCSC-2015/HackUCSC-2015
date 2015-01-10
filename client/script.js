@@ -170,6 +170,7 @@ $(document).ready(function() {
         data.endTime.setFullYear(startDate.getFullYear());
         data.endTime.setMonth(startDate.getMonth());
         data.endTime.setDate(startDate.getDay());
+        data.description = $('#description').html();
         save(currentlyViewing);
     });
 	
