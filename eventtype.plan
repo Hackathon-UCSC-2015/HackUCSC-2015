@@ -1,0 +1,11 @@
+EVENT.type possible fields
+           "LOAD_EVENT" -> message.data to the server contains name of event to get from server, message.data from server contains the event requested
+           "SAVE_EVENT" -> message.data.name contains name of event to save, message.data.data contains the event to save onto the server
+           "LOAD_SCHEDULE" -> message.data from the server contains the name (message.data.name) and data (message.data.data) of a schedule for the client to examine
+           "SAVE_SCHEDULE" -> message.data to the server contains the name (message.data.name) and schedule data (message.data.data) to save on the server and make available to other users
+           "ENTER_GROUP" -> message.data to the server contains a name of an event to join
+           "EXIT_GROUP" -> message.data to the server contains a name of an event to exit
+           "LIST_EVENTS" -> message.data from server contains an array of event names (each name will be a 
+           "ADD_COMMENT" -> message.data contains a 
+
+server will broadcast when new visible events are created/received
