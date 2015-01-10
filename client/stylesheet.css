@@ -4,7 +4,7 @@ body{
 }
 
 #eventlist {
-    background-color:#009900;
+    background-color:#8FBC8F;
     float:left;
 	position:fixed;
 	top:0px;
@@ -35,6 +35,8 @@ body{
 
 #header {
 	background-color:#33cc33;
+	background-image:url(images/headerGradient.png);
+	background-repeat:repeat-x;
 	height:50px;
 	width:100%;
 	position:absolute;
@@ -68,7 +70,7 @@ body{
 }
 
 #eventDetails {
-	background-color:#ccffcc;
+	background-color:#FFF8DC;
 	position:fixed;
 	width:500px;
 	height:500px;
@@ -133,4 +135,9 @@ body{
 	margin:5px;
 	background-color:#66cc66;
 	border-radius:10px;
+}
+#logo {
+	font-size:40px;
+	padding:5px;
+	font-family:"MS Serif", "New York", serif;
 }
