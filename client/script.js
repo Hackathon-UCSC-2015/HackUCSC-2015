@@ -61,7 +61,7 @@ function displayEvent(eventID) {
     $('#eventDetails > h2').html(data.name);
     $('#eventDetails > span').html(data.miniDescription);
     $('#description').html(data.description);
-    $('#eventDetails > img').attr('src','images/'+data.imageName);
+    $('#eventDetails > img').html('<img src="images/'+data.imageName+'" />');
 	$('#saveButton').hide();
     if(data.editing) {
         $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
@@ -72,6 +72,20 @@ function displayEvent(eventID) {
         $('#eventDetails > img').attr('src','images/'+data.imageName);
 		$('#saveButton').show();
     }
+}
+
+function clearContentFrame(){
+    $('#eventDetails > h2').html('');
+    $('#eventDetails > span').html('');
+    $('#description').html('');
+    $('#eventDetails > img').html('');
+	$('#saveButton').hide();
+}
+
+function deletePendingEvent(eventID) {
+	deleteEvent(eventID);
+	clearContentFrame();
+	stopEditing();
 }
 
 function newEventSidebarFromData(newEventData) {
@@ -85,7 +99,7 @@ function newEventSidebarFromData(newEventData) {
         displayEvent(newEvent.attr('codeID'));
     });
     newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
-    newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));stopEditing();});
+    newEvent.children('.statusImage').click(function(){deletePendingEvent($(this).parent().attr("codeID"));});
     newEvent.children('.eventTitle').html(newEventData.name);
     newEvent.children('.eventMiniDescription').html(newEventData.miniDescription);
     if(!newEventData.editing)
