@@ -194,7 +194,7 @@ var serverFunctions = { //functions for various commands
             group.events[decoded.data.id] = decoded.data; //replace our old event
         }
         getSocket(user).send(JSON.stringify({type: "SAVE_EVENT",
-                                                 data: decoded.data}));
+                                             data: decoded.data}));
         broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
                                                data: decoded.data}), user);
     },
