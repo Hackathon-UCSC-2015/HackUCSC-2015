@@ -69,7 +69,7 @@ socket.onmessage = function(event) {
     var fn = serverFunctions[data.type];
     console.log('Received '+data.type);
     if (fn){
-        fn(data); //run the function if we find it in our table
+        fn(data.data); //run the function if we find it in our table
     } else {
         console.log('Packet type '+data.type+' unknown in '+data);
     }
