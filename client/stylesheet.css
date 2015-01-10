@@ -100,7 +100,7 @@ body{
 	font-size:24px;
 }
 .eventMiniDescription{
-	padding-left:10px;
+	margin-left:10px;
 }
 .center-cropped {
   background-position: center center;
@@ -161,11 +161,15 @@ body{
 	padding-top:10px;
 	padding-bottom:10px;
 }
-.group:hover {
+.event {
+	border-bottom:#333 1px solid;
+	padding-bottom:10px;
+}
+.group:hover, .event:hover {
 	cursor:pointer;
 	background-color:#FFF8DC;	
 }
-.group:active {
+.group:active, .event:active {
 	cursor:pointer;
 	background-color:#E6E1B8;
 }
