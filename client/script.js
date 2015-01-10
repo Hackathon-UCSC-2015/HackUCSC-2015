@@ -23,7 +23,7 @@ function deleteEvent(eventID) {
 var headerCallback = function() {
     var data = eventDataByID(currentlyViewing);
     data.name = $('#eventDetails > h2').html();
-    if(data.name<100) {
+    if(data.name.length<100) {
         eventSidebarElementByID(data.id).children('.eventTitle').html(data.name);
     }
 }
@@ -31,7 +31,7 @@ var headerCallback = function() {
 var miniDescriptionCallback = function() {
     var data = eventDataByID(currentlyViewing);
     data.miniDescription = $('#eventDetails > span').html();
-    if(data.miniDescription<100) {
+    if(data.miniDescription.length<100) {
         eventSidebarElementByID(data.id).children('.eventMiniDescription').html(data.miniDescription);
     }
 }
