@@ -53,6 +53,7 @@ function stopEditing() {
     $('.timePicker').prop('readonly', true);
     $('#startDate').datepick('destroy');
     $('#endDate').datepick('destroy');
+	$('#attendance').show();
 }
 
 function eventSidebarElementByID(id) {
@@ -78,7 +79,10 @@ function displayEvent(eventID) {
         $('.timePicker').prop('readonly', false);
         $('#startDate').datepick();
         $('#endDate').datepick();
-    }
+		$('#attendance').hide();
+    }else{
+		$('#attendance').show();
+	}
 }
 
 function clearContentFrame(){
@@ -163,6 +167,7 @@ $(document).ready(function() {
 		$('#denyText').hide(200);	
 	});
 	$('#denyText').hide();
+	$('#attendance').hide();
     $('#startTime').timepicker({change: function(time) {
         var data = eventDataByID(currentlyViewing);
         if(data.editing) {
