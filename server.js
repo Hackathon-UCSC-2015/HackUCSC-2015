@@ -195,7 +195,8 @@ var serverFunctions = { //functions for various commands
         }
         getSocket(user).send(JSON.stringify({type: "SAVE_EVENT",
                                                  data: decoded.data}));
-        broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",                                                   data: decoded.data}), user);
+        broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
+                                               data: decoded.data}), user);
     },
     "DELETE_EVENT": function(decoded, user){
         
