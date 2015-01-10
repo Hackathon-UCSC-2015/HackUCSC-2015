@@ -11,6 +11,10 @@ socket.onmessage = function(event) {
     
 }
 
+function loadEvent(event) {
+    $('eventDetails > h2').html(event.children('.eventTitle').html());
+}
+
 $(document).ready(function() {
     $('#addEvent').click(function() {
         console.log('Add event!');
@@ -18,7 +22,8 @@ $(document).ready(function() {
         newEvent.show();
         newEvent.click(function() {
             $('.event').removeClass('selected');
-            newEvent.toggleClass('selected');
+            newEvent.addClass('selected');
+            loadEvent(newEvent);
         });
         $('#eventList').prepend(newEvent);
     });
