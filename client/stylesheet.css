@@ -92,7 +92,11 @@ body{
 	background-image:url(images/sampleEvent0.jpg);
 }
 .eventTitle{
-	
+	padding:5px;
+	font-size:24px;
+}
+.eventMiniDescription{
+	padding-left:10px;
 }
 .center-cropped {
   background-position: center center;
