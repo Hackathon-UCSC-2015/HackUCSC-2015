@@ -98,11 +98,11 @@ body{
   background-position: center center;
   background-repeat: no-repeat;
 }
-.plusButton:hover {
+.plusButton:hover, #saveButton:hover {
 	color:#3333cc;
 	cursor: pointer;
 }
-.plusButton:active {
+.plusButton:active, #saveButton:active {
 	color:#6666ff;
 	cursor:pointer;
 }
@@ -122,5 +122,11 @@ body{
 	
 }
 #saveButton {
-    float:bottom;
+    position:fixed;
+	bottom:10px;
+	right:10px;
+	padding:5px;
+	margin:5px;
+	background-color:#66cc66;
+	border-radius:10px;
 }
