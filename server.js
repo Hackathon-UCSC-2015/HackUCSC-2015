@@ -22,38 +22,47 @@ wss.broadcast = function(data){
 //console.log(data.name +'\n'+data.startTime +'\n'+data.endTime);
 
 //really nasty stuff follows
-var eventIDNumber = 0;
-var eventList = [];
-var scheduleIDNumber = 0;
-var scheduleList = [];
-var groupIDNumber = 0;
-var groupList = [];
+var events = [];
+var schedules = [];
 
-//turn the following wss.broadcast into a groupwise broadcast
+//group object
+Group = function() { 
+    this.events = []; 
+    this.users = [];
+};
+
+var globalGroup = new Group();
+var groups = [globalGroup];
+
+//broadcast a message to a group
+function broadcast(group, data){
+
+}
+
 var serverFunctions = { //functions for various commands
     //gets an event of a specified id from eventList and sends it as a jsonified
     //string to the user who requested it
     "LOAD_EVENT": function(decoded, ws){
         ws.send(JSON.stringify({type: "LOAD_EVENT",
-                                data: eventList[decoded.data]}));
+                                data: events[decoded.data]}));
     },
     //gets an event from a client and assigns it an id, saves it in eventList
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded, ws){
-        decoded.data.id = eventIDNumber++;
-        eventList.push(decoded.data);
+        decoded.data.id = events.length;
+        events.push(decoded.data);
         wss.broadcast(JSON.stringify({type: "SAVE_EVENT",
                                       data: decoded.data}));
     },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded, ws){
         ws.send(JSON.stringify({type: "LOAD_SCHEDULE",
-                                data: scheduleList[decoded.data]}));
+                                data: schedules[decoded.data]}));
     },
     //indeed also the same as above
     "SAVE_SCHEDULE": function(decoded, ws){
-        decoded.data.id = scheduleIDNumber++;
-        scheduleList.push(decoded.data);
+        decoded.data.id = schedules.length;
+        schedules.push(decoded.data);
         wss.send(JSON.stringify({type: "SAVE_SCHEDULE",
                                  data: decoded.data}));
     },
@@ -68,15 +77,15 @@ var serverFunctions = { //functions for various commands
     },
     "LIST_EVENTS": function(decoded, ws){
         ws.send(JSON.stringify({type: "LIST_EVENTS",
-                                data: eventList}));
+                                data: events}));
     },
     "LIST_SCHEDULES": function(decoded, ws){
         ws.send(JSON.stringify({type: "LIST_SCHEDULES",
-                                data: scheduleList}));
+                                data: schedules}));
     },
     "LIST_GROUPS": function(decoded, ws){
         ws.send(JSON.stringify({type: "LIST_GROUPS",
-                                data: groupList}));
+                                data: groups}));
     },
     "ADD_COMMENT": function(decoded, ws){
         
@@ -103,21 +112,19 @@ wss.on('connection', function(ws){
 
 //save the schedule and events and groups to file
 function saveAllData(){
-    fs.writeFileSync('./server_files/data', JSON.stringify({
-        events: eventList, eventID: eventIDNumber,
-        schedules: scheduleList, scheduleID: scheduleIDNumber,
-        groups: groupList, groupID: groupIDNumber}));
+    fs.writeFileSync('./server_files/data',
+                     JSON.stringify({
+                         events: events,
+                         schedules: schedules,
+                         groups: groups}));
     console.log('Saved all data.');
 }
 
 function loadAllData(){
     var data = JSON.parse(readFileSync('./server_files/data', 'utf8'));
-    eventList = data.events;
-    eventIDNumber = data.eventID;
-    schedulesList = data.schedules;
-    scheduleIDNumber = data.scheduleID;
-    groupList = data.groups;
-    groupIDNumber = data.groupID;
+    events = data.events;
+    schedules = data.schedules;
+    groups = data.groups;
 }
 
 function pushOnlyOne(array, value){
