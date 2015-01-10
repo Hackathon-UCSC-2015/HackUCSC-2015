@@ -155,8 +155,8 @@ $(document).ready(function() {
     $('#addEvent').click(function() {
         var newEventData = {};
         newEventData.id = "c"+idCounter++;
-        newEventData.name = "Event Title";
-        newEventData.miniDescription = "Mini Description";
+        newEventData.name = getName();
+        newEventData.miniDescription = getContent();
         newEventData.description = "Enter a long description here";
 		newEventData.imageName = "sampleImages/sampleEvent"+Math.floor(Math.random()*15)+".jpg";
         newEventData.groupID = 0;
