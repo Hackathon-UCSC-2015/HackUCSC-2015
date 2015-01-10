@@ -171,12 +171,14 @@ var serverFunctions = { //functions for various commands
             decoded.data.id = group.events.length; //assign an id
             events.push(decoded.data); 
             group.events.push(decoded.data);
-        }
-        ws.send(JSON.stringify({type: "SAVE_EVENT",
-                                data: decoded.data}));
-        broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
-                                               data: decoded.data}), ws);
-        
+
+        } else { //else we're overwriting a currently saved event
+            var event = group.events[decoded.data.id];
+            group.events[decoded.data.id] = decoded.data; //replace our old event
+            ws.send(JSON.stringify({type: "SAVE_EVENT",
+                                    data: decoded.data}));
+            broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
+                                                   data: decoded.data}), ws);
     },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded, ws){
