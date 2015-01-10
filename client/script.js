@@ -48,7 +48,7 @@ function stopEditing() {
     $('#eventDetails > span').get(0).removeEventListener('input', miniDescriptionCallback);
     $('#description').prop('contentEditable', false);
     eventDataByID(currentlyViewing).editing = false;
-	$('#saveButton').hide();
+	$('#saveButton').hide(100);
 }
 
 function eventSidebarElementByID(id) {
