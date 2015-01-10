@@ -87,7 +87,7 @@ $(document).ready(function() {
         newEventData.name = newEvent.children('.eventTitle').html();
         newEventData.miniDescription = newEvent.children('.eventMiniDescription').html();
         newEventData.description = "Enter a long description here";
-		newEventData.imageName = "sampleEvent"+Math.floor(Math.random()*8)+".jpg";
+		newEventData.imageName = "sampleEvent"+Math.floor(Math.random()*9)+".jpg";
         newEventData.groupID = 0;
 		newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
         events.push(newEventData);
@@ -97,5 +97,9 @@ $(document).ready(function() {
     
     $('#saveButton').click(function() {
         save(currentlyViewing);
+    });
+    
+    $('#loginButton').click(function() {
+        window.location.replace("/auth/google/");
     });
 });
