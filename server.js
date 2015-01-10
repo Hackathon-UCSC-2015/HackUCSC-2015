@@ -23,7 +23,6 @@ Group = function() {
     this.events = []; 
     this.users = [];
     this.id = groupID++;
-    
 };
 
 var groupID = 0;
@@ -33,7 +32,9 @@ var groups = [globalGroup];
 //broadcast a message to a group
 function broadcast(group, data){
     group.users.forEach(function(client){
-        client.send(data);
+        if (!client.connectionClosed){
+            client.send(data);
+        }
     });
 }
 
@@ -107,6 +108,9 @@ wss.on('connection', function(ws){
         } else {
             console.log('Packet type '+decoded.type+' unknown in '+decoded);
         }
+    });
+    ws.on('close', function(code, reason){
+        ws.connectionClosed = true;
     });
     ws.IDNumber = globalGroup.length;
     globalGroup.users.push(ws); //add the user to the global userlist
