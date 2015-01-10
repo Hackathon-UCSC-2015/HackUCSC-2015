@@ -86,7 +86,7 @@ $(document).ready(function() {
         $('#eventList').prepend(newEvent);
     });
     
-    $('saveButton').click(function() {
+    $('#saveButton').click(function() {
         save(currentlyViewing);
     });
 });
