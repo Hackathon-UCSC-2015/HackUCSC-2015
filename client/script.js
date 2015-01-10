@@ -5,7 +5,7 @@ var idCounter = 0;
 
 function eventDataIndexByID(id) {
     for (var i = 0; i < events.length; i++) {
-        if(events[i].id === id) {
+        if(events[i].id == id) {
             return i;
         }
     }
@@ -43,7 +43,7 @@ function stopEditing() {
     $('#eventDetails > span').prop('contentEditable', false);
     $('#eventDetails > span').get(0).removeEventListener('input', miniDescriptionCallback);
     $('#description').prop('contentEditable', false);
-    editing = false;
+    eventDataByID(currentlyViewing).editing = false;
 }
 
 function eventSidebarElementByID(id) {
@@ -52,17 +52,12 @@ function eventSidebarElementByID(id) {
 
 function displayEvent(eventID) {
     var data = eventDataByID(eventID);
+    console.log(eventID);
     $('#eventDetails > h2').html(data.name);
     $('#eventDetails > span').html(data.miniDescription);
     $('#description').html(data.description);
     $('#eventDetails > img').attr('src','images/'+data.imageName);
-}
-
-function prepareNewEvent(event) {
-    editing = true;
-    var data = eventDataByID(event.attr('codeID'));
-    currentlyViewing = data.id;
-    if(editing) {
+    if(data.editing) {
         $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
         $('#eventDetails > h2').get(0).addEventListener('input', headerCallback);
         $('#eventDetails > span').html(data.miniDescription).prop('contentEditable', true);
@@ -80,23 +75,17 @@ $(document).ready(function() {
         newEventData.id = "c"+idCounter++;
         newEvent.attr("codeID", newEventData.id);
         newEvent.click(function() {
-            if(editing && currentlyViewing != "" && newEvent.attr('codeID') != currentlyViewing) {
-                deleteEvent(currentlyViewing);
-                stopEditing();
-            }
-            if (newEvent.attr('codeID') != currentlyViewing) {
-                $('.event').removeClass('selected');
-                newEvent.addClass('selected');
-                currentlyViewing = newEvent.attr("codeID");
-                console.log(newEvent.attr('codeID'));
-                prepareNewEvent(newEvent);
-            }
+            $('.event').removeClass('selected');
+            newEvent.addClass('selected');
+            currentlyViewing = newEvent.attr("codeID");
+            displayEvent(newEvent.attr('codeID'));
         });
         newEventData.name = newEvent.children('.eventTitle').html();
         newEventData.miniDescription = newEvent.children('.eventMiniDescription').html();
         newEventData.description = "Enter a long description here";
 		newEventData.imageName = "sampleEvent"+Math.floor(Math.random()*9)+".jpg";
         newEventData.groupID = 0;
+        newEventData.editing = true;
 		newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
 		newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));stopEditing();});
         events.push(newEventData);
