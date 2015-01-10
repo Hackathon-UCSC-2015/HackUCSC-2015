@@ -48,6 +48,7 @@ function stopEditing() {
     $('#eventDetails > span').get(0).removeEventListener('input', miniDescriptionCallback);
     $('#description').prop('contentEditable', false);
     eventDataByID(currentlyViewing).editing = false;
+	$('#saveButton').hide();
 }
 
 function eventSidebarElementByID(id) {
@@ -80,7 +81,7 @@ function newEventSidebarFromData(newEventData) {
         newEvent.addClass('selected');
         currentlyViewing = newEvent.attr("codeID");
         displayEvent(newEvent.attr('codeID'));
-
+		$('#saveButton').show();
     });
     newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
     newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));stopEditing();});
@@ -110,6 +111,8 @@ $(document).ready(function() {
     $('#saveButton').click(function() {
         save(currentlyViewing);
     });
+	
+	$('#saveButton').hide();
     
     $('#loginButton').click(function() {
         window.location.replace("/auth/google/");
