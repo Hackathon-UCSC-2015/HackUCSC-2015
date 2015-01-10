@@ -13,6 +13,7 @@ socket.onmessage = function(event) {
 
 function loadEvent(event) {
     $('#eventDetails > h2').html(event.children('.eventTitle').html());
+	$('#eventDetails > img').attr('src','images/sampleEvent.jpg');
 }
 
 $(document).ready(function() {
