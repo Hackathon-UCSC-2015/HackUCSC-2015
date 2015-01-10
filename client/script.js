@@ -150,7 +150,19 @@ $(document).ready(function() {
     $('#loginButton').click(function() {
         window.location.replace("/auth/google/");
     });
-    
+	$('#confirmButton').hover(function() {
+		$('#confirmText').show(200);
+	},function(){
+		$('#confirmText').hide(200);	
+	});
+	$('#confirmText').hide();
+	
+	$('#denyButton').hover(function() {
+		$('#denyText').show(200);
+	},function(){
+		$('#denyText').hide(200);	
+	});
+	$('#denyText').hide();
     $('#startTime').timepicker({change: function(time) {
         var data = eventDataByID(currentlyViewing);
         if(data.editing) {
