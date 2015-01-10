@@ -41,9 +41,13 @@ app.get(auth.google.login,
 //Google login callback, google will send back information here on a succesful callback
 app.get(auth.google.loginCallback,
 	passport.authenticate('google', 
-		{successRedirect: '/',					//Back to main page
+		{//successRedirect: '/',					//Back to main page
 		failureRedirect: auth.google.login}),	//Retry login. Perhapse this should do something else
-	function(req, res){}
+	function(req, res){
+		console.log('=======================================\n\n');
+		console.log(req.user.id);
+		res.redirect('/?userid='+req.user.id);
+	}
 );
 
 //Information from google login request
@@ -58,7 +62,7 @@ var request = function(accessToken, refreshToken, profile, done)
 	    console.log("Email: "+profile.emails);
 	    console.log("Access Token: "+accessToken);
         
-        cal.getGoogleCalendarData(accessToken);
+       // cal.getGoogleCalendarData(accessToken);
         
 	    return done(null, profile);
 	});
