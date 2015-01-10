@@ -40,7 +40,7 @@ $(document).ready(function() {
         newEventData.title = newEvent.children('.eventTitle').html();
         newEventData.miniDescription = newEvent.children('.eventMiniDescription').html();
         newEventData.description = "Enter a long description here";
-		newEventData.imageName = "sampleEvent"+Math.floor(Math.random()*3)+".jpg"
+		newEventData.imageName = "sampleEvent"+Math.floor(Math.random()*4)+".jpg"
 		console.log(newEventData.imageName);
 		newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
         events.push(newEventData);
