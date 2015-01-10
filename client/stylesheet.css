@@ -87,6 +87,14 @@ body{
 	position:relative;
 	bottom:12px;
 }
-.event {
+.eventImagePreview {
+	height:70px;
+	background-image:url(images/sampleEvent.jpg);
+}
+.eventTitle{
 	
+}
+.center-cropped {
+  background-position: center center;
+  background-repeat: no-repeat;
 }
