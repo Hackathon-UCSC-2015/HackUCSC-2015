@@ -98,3 +98,19 @@ body{
   background-position: center center;
   background-repeat: no-repeat;
 }
+.plusButton:hover {
+	color:#3333cc;
+	cursor: pointer;
+}
+.plusButton:active {
+	color:#6666ff;
+	cursor:pointer;
+}
+.statusImage:hover{
+	cursor:pointer;
+}
+.plusButtonText {
+	padding-top:5px;
+	padding-left:5px;
+	float:right;
+}
