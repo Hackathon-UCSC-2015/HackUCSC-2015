@@ -55,14 +55,14 @@ app.get(auth.google.login,
 		{scope: ['openid',
 		'https://www.googleapis.com/auth/calendar']}), 
 	function(req,res){}
-	);
+);
 
 app.get(auth.google.loginCallback,
 	passport.authenticate('google', 
 		{successRedirect: '/',					//Back to main page
 		failureRedirect: auth.google.login}),	//Retry login. Perhapse this should do something else
 	function(req, res){}
-	);
+);
 
 var request = function(accessToken, refreshToken, profile, done)
 {
@@ -198,8 +198,11 @@ var serverFunctions = { //functions for various commands
 
     },
     "LIST_EVENTS": function(decoded, ws){
-        ws.send(JSON.stringify({type: "LIST_EVENTS",
-                                data: events}));
+        //Give the user all current events
+        events.forEach(function(event) {
+            ws.send(JSON.stringify({type: "LOAD_EVENT",
+                                data: event}));
+        });
     },
     "LIST_SCHEDULES": function(decoded, ws){
         ws.send(JSON.stringify({type: "LIST_SCHEDULES",
