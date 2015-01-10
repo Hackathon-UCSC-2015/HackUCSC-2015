@@ -173,6 +173,61 @@ body{
 	cursor:pointer;
 	background-color:#E6E1B8;
 }
+.attendanceButton:hover {
+	cursor:pointer;
+}
 div[contenteditable] {
 	background-color:#878787;
+}
+#description {
+	overflow:scroll;
+	height:300px;
+}
+#attendance {
+	height:100px;
+	width: -webkit-calc(100% - 510px); 
+	width: -moz-calc(100% - 510px); 
+	position:fixed;
+	bottom:0px;
+	right:0px;
+	text-align:center;
+}
+.attendanceButton {
+	width:64px;
+	height:64px;
+	position:relative;
+	top:20px;
+}
+#confirmButton {
+	background-image:url(images/confirm.png);
+}
+#confirmButton:active {
+	background-image:url(images/confirmDown.png);
+}
+#denyButton {
+	background-image:url(images/deny.png);
+}
+#denyButton:active {
+	background-image:url(images/denyDown.png);
+}
+#confirmText {
+	color:#66ff66;
+	text-shadow: 1px 2px #009900;
+	position:fixed;
+	width: -webkit-calc(50% - 330px); 
+	width: -moz-calc(50% - 330px); 
+	left: -mox-calc(100% - 510px);
+	left: -webkit-calc(100% - 510px);
+	text-align:right;
+	bottom:40px;
+}
+#denyText {
+	color:#ff6666;
+	text-shadow: 1px 2px #990000;
+	position:fixed;
+	width: -webkit-calc(50% - 330px); 
+	width: -moz-calc(50% - 330px); 
+	right:0px;
+	text-align:left;
+	bottom:40px;
 }
