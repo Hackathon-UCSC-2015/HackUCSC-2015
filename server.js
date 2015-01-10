@@ -15,6 +15,79 @@ var wss = new WebSocketServer({port:8080});
 //var data = cal.getCalData();
 //console.log(data.name +'\n'+data.startTime +'\n'+data.endTime);
 
+
+//=========================================================
+
+
+
+var gstrat = require('passport-google-oauth').OAuth2Strategy;
+var passport = require('passport');
+var gcal = require('google-calendar');
+
+app.use(passport.initialize());
+app.use(passport.session({secret: "test"}));
+
+var clientId ='150705574355-54aapich5dkqr7gts5j9rolh96h87fll.apps.googleusercontent.com';
+var clientSecret = 'Lh8PNvlR8515OckCtXNnNN68';
+
+//var gc = new gcal.GoogleCalendar(accessToken);
+app.get('/auth/google', 
+	passport.authenticate('google', 
+		{scope: ['openid',
+		'https://www.googleapis.com/auth/calendar']}), 
+	function(req,res){}
+	);
+
+app.get('/auth/google/callback',
+	passport.authenticate('google', {successRedirect: '/',failureRedirect: '/fail'}),
+	function(req, res){
+		console.log("/auth/google/callback");
+	}
+	);
+
+var request = function(accessToken, refreshToken, profile, done)
+{
+	console.log("test");
+	process.nextTick(
+		function()
+		{
+			console.log('here');
+			console.log("User Id: "+profile.id);
+			console.log("Display Name: "+profile.displayName);
+			console.log("Email: "+profile.emails);
+			console.log("Access Token: "+accessToken);
+
+			return done(null, profile);
+
+		//return done(null, profile);
+		});
+	
+};
+
+passport.use(
+	new gstrat(
+	{
+		clientID: clientId,
+		clientSecret: clientSecret,
+		callbackURL: 'http://localhost:3000/auth/google/callback',
+	},
+	request
+	)
+);
+
+passport.serializeUser(function(user, done) {
+done(null, user);
+});
+
+
+
+//===============================================================
+
+
+
+
+
+
 var events = [];
 var schedules = [];
 
