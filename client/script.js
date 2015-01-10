@@ -9,10 +9,14 @@ function eventDataIndexByID(id) {
             return i;
         }
     }
+    return undefined;
 }
 
 function eventDataByID(id) {
-    return events[eventDataIndexByID(id)];
+    var i = eventDataIndexByID(id);
+    if(i === undefined)
+        return undefined;
+    return events[i];
 }
 
 function deleteEvent(eventID) {
