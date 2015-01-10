@@ -4,6 +4,10 @@ var serverFunctions = { //functions for various commands
     //gets an event of a specified id from eventList and sends it as a jsonified
     //string to the user who requested it
     "LOAD_EVENT": function(decoded){
+        //JSON.stringify turns a date object to a string, and then JSON.parse parses it as a string again
+        //so we have to remake the date objects
+        decoded.startTime = new Date(decoded.startTime);
+        decoded.endTime = new Date(decoded.endTime);
         events.push(decoded);
         newEventSidebarFromData(decoded);
     },

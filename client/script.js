@@ -34,7 +34,7 @@ var headerCallback = function() {
 
 var miniDescriptionCallback = function() {
     var data = eventDataByID(currentlyViewing);
-    data.miniDescription = $('#eventDetails > span').html();
+    data.miniDescription = $('#miniDescription').html();
     if(data.miniDescription.length<100) {
         eventSidebarElementByID(data.id).children('.eventMiniDescription').html(data.miniDescription);
     }
@@ -44,12 +44,15 @@ function stopEditing() {
     eventSidebarElementByID(currentlyViewing).children('.statusImage').hide();
     $('#eventDetails > h2').prop('contentEditable', false);
     $('#eventDetails > h2').get(0).removeEventListener('input', headerCallback);
-    $('#eventDetails > span').prop('contentEditable', false);
-    $('#eventDetails > span').get(0).removeEventListener('input', miniDescriptionCallback);
+    $('#miniDescription').prop('contentEditable', false);
+    $('#miniDescription').get(0).removeEventListener('input', miniDescriptionCallback);
     $('#description').prop('contentEditable', false);
     $('.timePicker').prop('readonly', true);
     eventDataByID(currentlyViewing).editing = false;
 	$('#saveButton').hide(100);
+    $('.timePicker').prop('readonly', true);
+    $('#startDate').datepick('destroy');
+    $('#endDate').datepick('destroy');
 }
 
 function eventSidebarElementByID(id) {
@@ -58,26 +61,29 @@ function eventSidebarElementByID(id) {
 
 function displayEvent(eventID) {
     var data = eventDataByID(eventID);
-    console.log(eventID);
     $('#eventDetails > h2').html(data.name);
-    $('#eventDetails > span').html(data.miniDescription);
+    $('#miniDescription').html(data.miniDescription);
     $('#description').html(data.description);
     $('#eventDetails > #eventImage').html('<img src="images/'+data.imageName+'" />');
 	$('#saveButton').hide();
+    $('#startDate').val(data.startTime.toDateString());
+    $('#endDate').val(data.endTime.toDateString());
     if(data.editing) {
         $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
         $('#eventDetails > h2').get(0).addEventListener('input', headerCallback);
-        $('#eventDetails > span').html(data.miniDescription).prop('contentEditable', true);
-        $('#eventDetails > span').get(0).addEventListener('input', miniDescriptionCallback);
+        $('#miniDescription').html(data.miniDescription).prop('contentEditable', true);
+        $('#miniDescription').get(0).addEventListener('input', miniDescriptionCallback);
         $('#description').html(data.description).prop('contentEditable', true);
 		$('#saveButton').show();
         $('.timePicker').prop('readonly', false);
+        $('#startDate').datepick();
+        $('#endDate').datepick();
     }
 }
 
 function clearContentFrame(){
     $('#eventDetails > h2').html('');
-    $('#eventDetails > span').html('');
+    $('#miniDescription').html('');
     $('#description').html('');
     $('#eventDetails > #eventImage').html('');
 	$('#saveButton').hide();
@@ -127,6 +133,15 @@ $(document).ready(function() {
     });
     
     $('#saveButton').click(function() {
+        var startDate = $('#startDate').datepick('getDate')[0];
+        var endDate = $('#endDate').datepick('getDate')[0];
+        var data = eventDataByID(currentlyViewing);
+        data.startTime.setFullYear(startDate.getFullYear());
+        data.startTime.setMonth(startDate.getMonth());
+        data.startTime.setDate(startDate.getDay());
+        data.endTime.setFullYear(startDate.getFullYear());
+        data.endTime.setMonth(startDate.getMonth());
+        data.endTime.setDate(startDate.getDay());
         save(currentlyViewing);
     });
 	
@@ -157,4 +172,6 @@ $(document).ready(function() {
             $('#endTime').val($(this).timepicker().format(data.endTime));
         }
     }});
+    
+    
 });

@@ -2,10 +2,13 @@
     <head>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script src="libraries/jquery.timepicker.min.js"></script>
+        <script src="libraries/jquery.plugin.min.js"></script>
+        <script src="libraries/jquery.datepick.min.js"></script>
         <script src="script.js"></script>
         <script src="clientnetworking.js"></script>
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
         <link rel="stylesheet" type="text/css" href="libraries/jquery.timepicker.min.css">
+        <link rel="stylesheet" type="text/css" href="libraries/jquery.datepick.css">
         <title>Event Handler's, Inc.</title>
         <link rel="icon" href="icon.png" type="image/png">
     </head>
@@ -43,10 +46,12 @@
         <div id="eventDetails">
         	<div id="eventImage"><img /></div>
             <h2 class="editable"></h2>
-            <span></span>
+            <span id="miniDescription"></span>
             <p id="description"></p>
             Start Time:<input type="text" id="startTime" class="timePicker"/><br/>
-            End Time:<input type="text" id="endTime" class="timePicker"/>
+            Start Date: <input id="startDate"></input><br/>
+            End Time:<input type="text" id="endTime" class="timePicker"/><br/>
+            End Date: <input id="endDate"></input>
             <div id="saveButton" class="noselect">Save Event</div>
         </div>
     </body>

@@ -176,3 +176,13 @@ body{
 div[contenteditable] {
 	background-color:#878787;
 }
+
+#startDate {
+    background-color: beige;
+    width: 100px;
+}
+
+#endDate {
+    background-color: beige;
+    width: 100px;
+}
