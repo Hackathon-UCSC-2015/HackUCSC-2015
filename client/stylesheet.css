@@ -7,12 +7,12 @@ body{
     background-color:#FFFAF0;
     float:left;
 	position:fixed;
-	top:0px;
+	bottom:50px;
 	left:200px;
     width:300px;
-    height:100%;  
-	margin-top:50px;
 	overflow:scroll;
+	height: -webkit-calc(100% - 100px); 
+	height: -moz-calc(100% - 100px); 
 }
 
 #loginButton {
@@ -61,7 +61,7 @@ body{
 .plusbutton {
     position: fixed;
     bottom: 0px;
-	left: 0px;
+	left: 200px;
 	z-index:2;
 }
 
