@@ -126,6 +126,10 @@ body{
 	float:left;
 	margin:10px;
 }
+#eventImageImage {
+	width:150px;
+	height:150px;
+}
 .editable {
 	
 }
@@ -192,7 +196,7 @@ div[contenteditable] {
 }
 
 #description {
-	overflow:scroll;
+	/*overflow:scroll;*/
 	height:300px;
 }
 #attendance {

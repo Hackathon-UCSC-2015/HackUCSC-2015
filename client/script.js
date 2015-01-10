@@ -64,7 +64,7 @@ function displayEvent(eventID) {
     $('#eventDetails > h2').html(data.name);
     $('#miniDescription').html(data.miniDescription);
     $('#description').html(data.description);
-    $('#eventDetails > #eventImage').html('<img src="images/'+data.imageName+'" />');
+    $('#eventDetails > #eventImage').html('<img id="eventImageImage" src="images/'+data.imageName+'" />');
 	$('#saveButton').hide();
     $('#startDate').val(data.startTime.toDateString());
     $('#endDate').val(data.endTime.toDateString());
