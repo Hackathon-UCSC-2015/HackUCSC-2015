@@ -98,4 +98,8 @@ $(document).ready(function() {
     $('#saveButton').click(function() {
         save(currentlyViewing);
     });
+    
+    $('#loginButton').click(function() {
+        window.location.replace("/auth/google/");
+    });
 });
