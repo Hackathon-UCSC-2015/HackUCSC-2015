@@ -68,9 +68,10 @@ wss.on('connection', function(ws){
     console.log('user connected');
     ws.on('message', function(packet){
         var decoded = JSON.parse(packet);
-        console.log('Received '+decoded); //debug
+        //console.log('Received '+decoded); //debug
         //search for and run the command recieved in our server table
         var fn = serverFunctions[decoded.type];
+        console.log('Received '+decoded.type);
         if (fn){
             fn(decoded, ws); //run the function if we find it in our table
         } else {
@@ -78,7 +79,7 @@ wss.on('connection', function(ws){
         }
     });
     //every six minutes save all events and schedules
-    setInterval(saveAllData, 6*60*1000);
+    //setInterval(saveAllData, 6*60*1000);
 });
 
 //save the schedule and events and groups to file
@@ -87,9 +88,18 @@ function saveAllData(){
         events: eventList, eventID: eventIDNumber,
         schedules: scheduleList, scheduleID: scheduleIDNumber,
         groups: groupList, groupID: groupIDNumber}));
-    console.log('Saved data again');
+    console.log('Saved all data.');
 }
 
+function loadAllData(){
+    var data = JSON.parse(readFileSync('./server_files/data', 'utf8'));
+    eventList = data.events;
+    eventIDNumber = data.eventID;
+    schedulesList = data.schedules;
+    scheduleIDNumber = data.scheduleID;
+    groupList = data.groups;
+    groupIDNumber = data.groupID;
+}
 
 function pushOnlyOne(array, value){
     if (array.indexOf(value) === -1){
