@@ -23,10 +23,8 @@ body{
 	padding-top:15px;
 }
 #loginButton:hover {
-	color:#09C
-    height: 100%;
-	margin-top:50px;
-    position: relative;
+	color:#09C;
+	cursor: pointer;
 }
 
 #header {
