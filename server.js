@@ -15,32 +15,51 @@ var cal = require('./calendar.js');
 var data = cal.getCalData();
 console.log(data.name +'\n'+data.startTime +'\n'+data.endTime);
 
+//really nasty stuff follows
 var eventIDNumber = 0;
 var eventList = [];
+var scheduleIDNumber = 0;
+var scheduleList = [];
+var groupIDNumber = 0;
+var groupList = [];
 
 var serverFunctions = { //functions for various commands
-    "LOAD_EVENT": function(decoded){
-        
+    //gets an event of a specified id from eventList and sends it as a jsonified
+    //string to the user who requested it
+    "LOAD_EVENT": function(decoded, ws){
+        ws.send(JSON.stringify({type: "LOAD_EVENT", 
+                                data: eventList[decoded.data]}));
     },
-    "SAVE_EVENT": function(decoded){
+    //gets an event from a client and assigns it an id, saves it in eventList
+    //and sends the whole event back to the client
+    "SAVE_EVENT": function(decoded, ws){
         decoded.data.id = eventIDNumber++;
+        eventList.push(decoded.data);
+        ws.send(JSON.stringify({type: "SAVE_EVENT",
+                                data: decoded.data}));
     },
-    "LOAD_SCHEDULE": function(decoded){
+    //the same as above except for schedules
+    "LOAD_SCHEDULE": function(decoded, ws){
+        ws.send(JSON.stringify({type: "LOAD_SCHEDULE",
+                                data: scheduleList[decoded.data]}));
+    },
+    //indeed also the same as above
+    "SAVE_SCHEDULE": function(decoded, ws){
+        decoded.data.id = scheduleIDNumber++;
+        scheduleList.push(decoded.data);
+        ws.send(JSON.stringify({type: "SAVE_SCHEDULE",
+                                data: decoded.data}));
+    },
+    "ENTER_GROUP": function(decoded, ws){
         
     },
-    "SAVE_SCHEDULE": function(decoded){
+    "EXIT_GROUP": function(decoded, ws){
         
     },
-    "ENTER_GROUP": function(decoded){
+    "LIST_EVENTS": function(decoded, ws){
         
     },
-    "EXIT_GROUP": function(decoded){
-        
-    },
-    "LIST_EVENTS": function(decoded){
-        
-    },
-    "ADD_COMMENT": function(decoded){
+    "ADD_COMMENT": function(decoded, ws){
         
     }
 };
@@ -49,13 +68,31 @@ wss.on('connection', function(ws){
     console.log('user connected');
     ws.on('message', function(packet){
         var decoded = JSON.parse(packet);
-        console.log("Received "+decoded); //debug
+        console.log('Received '+decoded); //debug
         //search for and run the command recieved in our server table
         var fn = serverFunctions[decoded.type];
         if (fn){
-            fn(decoded); //run the function if we find it in our table
+            fn(decoded, ws); //run the function if we find it in our table
         } else {
-            console.log("Packet type "+decoded.type+" unknown in "+decoded);
+            console.log('Packet type '+decoded.type+' unknown in '+decoded);
         }
     });
+    //every six minutes save all events and schedules
+    setInterval(saveAllData, 6*60*1000);
 });
+
+//save the schedule and events and groups to file
+function saveAllData(){
+    fs.writeFileSync('./server_files/data', JSON.stringify({
+        events: eventList, eventID: eventIDNumber,
+        schedules: scheduleList, scheduleID: scheduleIDNumber,
+        groups: groupList, groupID: groupIDNumber}));
+    console.log('Saved data again');
+}
+
+
+function pushOnlyOne(array, value){
+    if (array.indexOf(value) === -1){
+        array.push(value);
+    }
+}
