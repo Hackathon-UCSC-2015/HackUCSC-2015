@@ -179,6 +179,7 @@ var serverFunctions = { //functions for various commands
                                     data: decoded.data}));
             broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
                                                    data: decoded.data}), ws);
+        }
     },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded, ws){
