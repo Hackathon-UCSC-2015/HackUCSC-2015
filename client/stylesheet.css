@@ -79,3 +79,8 @@ body{
 	width: -webkit-calc(100% - 310px); 
 	width: -moz-calc(100% - 310px); 
 }
+.statusImage {
+    width: 30px;
+    height: 30px;
+    float: right;
+}
