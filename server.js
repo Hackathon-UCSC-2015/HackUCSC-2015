@@ -32,8 +32,14 @@ var groups = [globalGroup];
 //broadcast a message to a group
 function broadcast(group, data){
     group.users.forEach(function(client){
-        client.send(data);
+        if (!client.connectionClosed){
+            client.send(data);
+        }
     });
+}
+
+function getGroup(ID){
+    return groups[ID];
 }
 
 var serverFunctions = { //functions for various commands
@@ -48,7 +54,7 @@ var serverFunctions = { //functions for various commands
     "SAVE_EVENT": function(decoded, ws){
         decoded.data.id = events.length;
         events.push(decoded.data);
-        broadcast(decoded.data.group, JSON.stringify({type: "SAVE_EVENT",
+        broadcast(getGroup(decoded.data.groupID), JSON.stringify({type: "SAVE_EVENT",
                                                       data: decoded.data}));
     },
     //the same as above except for schedules
@@ -102,6 +108,9 @@ wss.on('connection', function(ws){
         } else {
             console.log('Packet type '+decoded.type+' unknown in '+decoded);
         }
+    });
+    ws.on('close', function(code, reason){
+        ws.connectionClosed = true;
     });
     ws.IDNumber = globalGroup.length;
     globalGroup.users.push(ws); //add the user to the global userlist

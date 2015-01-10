@@ -14,6 +14,7 @@ var serverFunctions = { //functions for various commands
         eventData.id = decoded.id;
         var eventSidebar = eventSidebarElementByID(currentlyViewing);
         eventSidebar.attr('codeID', decoded.id);
+        currentlyViewing = eventData.id;
         stopEditing();
         eventSidebar.off('click');
         eventSidebar.click(function() {
