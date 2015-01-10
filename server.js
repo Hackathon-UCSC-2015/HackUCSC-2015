@@ -12,7 +12,30 @@ var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({port:8080});
 
 var serverFunctions = { //functions for various commands
-    ""
+    "LOAD_EVENT": function(decoded){
+        
+    },
+    "SAVE_EVENT": function(decoded){
+        
+    },
+    "LOAD_SCHEDULE": function(decoded){
+        
+    },
+    "SAVE_SCHEDULE": function(decoded){
+        
+    },
+    "ENTER_GROUP": function(decoded){
+        
+    },
+    "EXIT_GROUP": function(decoded){
+        
+    },
+    "LIST_EVENTS": function(decoded){
+        
+    },
+    "ADD_COMMENT": function(decoded){
+        
+    }
 };
 
 wss.on('connection', function(ws){
@@ -22,6 +45,10 @@ wss.on('connection', function(ws){
         console.log("Received "+decoded); //debug
         //search for and run the command recieved in our server table
         var fn = serverFunctions[decoded.type];
-        fn && fn(decoded); //run the function if we find it in our table
+        if (fn){
+            fn(decoded); //run the function if we find it in our table
+        } else {
+            console.log("Packet type "+decoded.type+" unknown in "+decoded);
+        }
     });
 });
