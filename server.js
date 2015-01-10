@@ -185,6 +185,7 @@ wss.on('connection', function(ws){
     });
     ws.on('close', function(code, reason){
         ws.connectionClosed = true;
+        console.log("User "+ws.IDNumber+" quit");
     });
     ws.IDNumber = globalGroup.length;
     globalGroup.users.push(ws); //add the user to the global userlist
@@ -220,4 +221,4 @@ if (!fs.existsSync(__dirname+'/server_files')){
 fs.writeFileSync(__dirname+'/server_files/data');
 
 //every six minutes save all events and schedules
-setInterval(saveAllData, 2000);
+setInterval(saveAllData, 2000000);
