@@ -1,6 +1,9 @@
 
 $(document).ready(function() {
-    $('#addevent').click(function() {
-        console.log("Add event!");
+    $('#addEvent').click(function() {
+        console.log('Add event!');
+        var newEvent = $('#eventTemplate').clone();
+        newEvent.show();
+        $('#eventList').prepend(newEvent);
     });
 });
