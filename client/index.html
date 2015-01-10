@@ -1,9 +1,11 @@
 <html>
     <head>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="libraries/jquery.timepicker.min.js"></script>
         <script src="script.js"></script>
         <script src="clientnetworking.js"></script>
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
+        <link rel="stylesheet" type="text/css" href="libraries/jquery.timepicker.min.css">
         <title>Event Handler's, Inc.</title>
         <link rel="icon" href="icon.png" type="image/png">
     </head>
@@ -43,6 +45,8 @@
             <h2 class="editable"></h2>
             <span></span>
             <p id="description"></p>
+            Start Time:<input type="text" id="startTime" class="timePicker"/><br/>
+            End Time:<input type="text" id="endTime" class="timePicker"/>
             <div id="saveButton" class="noselect">Save Event</div>
             <div id="attendance">
             	<div id="confirmText">I will attend</div>
