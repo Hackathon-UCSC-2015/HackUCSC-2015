@@ -48,9 +48,7 @@ app.get('/auth/google/callback',
 var request = function(accessToken, refreshToken, profile, done)
 {
     console.log("test");
-    process.nextTick(
-	function()
-	{
+    process.nextTick(function() {
 	    console.log('here');
 	    console.log("User Id: "+profile.id);
 	    console.log("Display Name: "+profile.displayName);
@@ -110,6 +108,14 @@ function broadcast(group, data){
     });
 }
 
+function broadcastAllBut(group, data, ws) {
+    group.users.forEach(function(client){
+        if (!client.connectionClosed && client != ws){
+            client.send(data);
+        }
+    });
+}
+
 function getGroup(ID){
     return groups[ID];
 }
@@ -128,9 +134,11 @@ var serverFunctions = { //functions for various commands
         decoded.data.id = group.events.length;
         events.push(decoded.data);
         group.events.push(decoded.data);
-        broadcast(group,
-                  JSON.stringify({type: "SAVE_EVENT",
+        ws.send(JSON.stringify({type: "SAVE_EVENT",
                                   data: decoded.data}));
+        broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
+                                  data: decoded.data}), ws);
+        
     },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded, ws){

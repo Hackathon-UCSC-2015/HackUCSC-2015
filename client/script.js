@@ -71,31 +71,40 @@ function displayEvent(eventID) {
     }
 }
 
+function newEventSidebarFromData(newEventData) {
+    var newEvent = $('#eventTemplate').clone();
+    newEvent.show();
+    newEvent.attr("codeID", newEventData.id);
+    newEvent.click(function() {
+        $('.event').removeClass('selected');
+        newEvent.addClass('selected');
+        currentlyViewing = newEvent.attr("codeID");
+        displayEvent(newEvent.attr('codeID'));
+
+    });
+    newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
+    newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));stopEditing();});
+    newEvent.children('.eventTitle').html(newEventData.name);
+    newEvent.children('.eventMiniDescription').html(newEventData.miniDescription);
+    if(!newEventData.editing)
+        newEvent.children('.statusImage').hide();
+    
+    $('#eventList').prepend(newEvent);
+}
+
 $(document).ready(function() {
     $('#addEvent').click(function() {
-        var newEvent = $('#eventTemplate').clone();
-        newEvent.show();
         var newEventData = {};
         newEventData.id = "c"+idCounter++;
-        newEvent.attr("codeID", newEventData.id);
-        newEvent.click(function() {
-            $('.event').removeClass('selected');
-            newEvent.addClass('selected');
-            currentlyViewing = newEvent.attr("codeID");
-            displayEvent(newEvent.attr('codeID'));
-
-        });
-        newEventData.name = newEvent.children('.eventTitle').html();
-        newEventData.miniDescription = newEvent.children('.eventMiniDescription').html();
+        newEventData.name = "Event Title";
+        newEventData.miniDescription = "Mini Description";
         newEventData.description = "Enter a long description here";
 		newEventData.imageName = "sampleImages/sampleEvent"+Math.floor(Math.random()*15)+".jpg";
         newEventData.groupID = 0;
         newEventData.editing = true;
-		newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
-		newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));stopEditing();});
         events.push(newEventData);
 		
-        $('#eventList').prepend(newEvent);
+        newEventSidebarFromData(newEventData);
     });
     
     $('#saveButton').click(function() {

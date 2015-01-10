@@ -4,7 +4,8 @@ var serverFunctions = { //functions for various commands
     //gets an event of a specified id from eventList and sends it as a jsonified
     //string to the user who requested it
     "LOAD_EVENT": function(decoded){
-        
+        events.push(decoded);
+        newEventSidebarFromData(decoded);
     },
     //gets an event from a client and assigns it an id, saves it in eventList
     //and sends the whole event back to the client
@@ -63,6 +64,7 @@ socket.onmessage = function(event) {
 function save(id) {
     var packet = {};
     packet.type = "SAVE_EVENT";
+    stopEditing();
     packet.data = eventDataByID(id);
     socket.send(JSON.stringify(packet));
 }
