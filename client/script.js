@@ -1,16 +1,3 @@
-var socket = new WebSocket('ws://127.0.0.1:8080/');
-
-socket.onopen = function() {
-    var packet = {};
-    packet.type = "LIST_EVENTS";
-    socket.send(JSON.stringify(packet));
-}
-
-socket.onmessage = function(event) {
-    var data = JSON.parse(event.data);
-    
-}
-
 var events = [];
 
 function eventDataByID(id) {
@@ -31,7 +18,9 @@ function prepareNewEvent(event) {
     $('#eventDetails > h2').get(0).addEventListener('input', function() {
         data.title = $('#eventDetails > h2').html();
         console.log(data.title);
-        eventSidebarElementByID(data.id).children('.eventTitle').html = data.title;
+        console.log(data.id);
+        //eventSidebarElementByID(data.id).children('.eventTitle').html(data.title);
+        console.log(eventSidebarElementByID(data.id));
     });
     $('#eventDetails > span').html(data.miniDescription).prop('contentEditable', true);
     $('#description').html(data.description).prop('contentEditable', true);
