@@ -90,6 +90,7 @@ $(document).ready(function() {
 		newEventData.imageName = "sampleEvent"+Math.floor(Math.random()*9)+".jpg";
         newEventData.groupID = 0;
 		newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
+		newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));stopEditing();});
         events.push(newEventData);
 		
         $('#eventList').prepend(newEvent);
