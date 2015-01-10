@@ -87,7 +87,6 @@ done(null, user);
 
 
 
-
 var events = [];
 var schedules = [];
 
@@ -128,6 +127,7 @@ var serverFunctions = { //functions for various commands
         var group = getGroup(decoded.data.groupID);
         decoded.data.id = group.events.length;
         events.push(decoded.data);
+        group.events.push(decoded.data);
         broadcast(group,
                   JSON.stringify({type: "SAVE_EVENT",
                                   data: decoded.data}));
@@ -174,7 +174,7 @@ wss.on('connection', function(ws){
     console.log('user connected');
     ws.on('message', function(packet){
         var decoded = JSON.parse(packet);
-        //console.log('Received '+decoded); //debug
+        console.log('Received '+decoded); //debug
         //search for and run the command recieved in our server table
         var fn = serverFunctions[decoded.type];
         console.log('Received '+decoded.type);
@@ -192,21 +192,36 @@ wss.on('connection', function(ws){
     globalGroup.users.push(ws); //add the user to the global userlist
 });
 
+function safeUsers(group){
+    return group.users.map(function(ws){
+        return {IDNumber: ws.IDNumber,
+                connectionClosed: ws.connectionClosed};
+    });
+}
+
 //save the schedule and events and groups to file
 function saveAllData(){
+    console.log(events);
+    console.log(schedules);
+    console.log(groups);
+    var newgroups = groups.map(function(group){
+        return new Group(group.events,
+                         safeUsers(group),
+                         group.id);
+    });
     fs.writeFileSync(__dirname+'/server_files/data',
                      JSON.stringify({
-                         events: events,
-                         schedules: schedules,
-                         groups: groups}));
+                         events1: events,
+                         schedules1: schedules,
+                         groups1: newgroups}));
     console.log('Saved all data.');
 }
 
 function loadAllData(){
     var data = JSON.parse(readFileSync(__dirname+'/server_files/data', 'utf8'));
-    events = data.events;
-    schedules = data.schedules;
-    groups = data.groups;
+    events = data.events1;
+    schedules = data.schedules1;
+    groups = data.groups1;
 }
 
 function pushOnlyOne(array, value){
@@ -222,4 +237,4 @@ if (!fs.existsSync(__dirname+'/server_files')){
 fs.writeFileSync(__dirname+'/server_files/data');
 
 //every six minutes save all events and schedules
-setInterval(saveAllData, 2000000);
+setInterval(saveAllData, 2000);
