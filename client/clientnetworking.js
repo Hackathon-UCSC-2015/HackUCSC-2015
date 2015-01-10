@@ -9,7 +9,6 @@ var serverFunctions = { //functions for various commands
         decoded.startTime = new Date(decoded.startTime);
         decoded.endTime = new Date(decoded.endTime);
         events.push(decoded);
-		decoded.attending = Math.floor(Math.random()*3);
         newEventSidebarFromData(decoded);
     },
     //gets an event from a client and assigns it an id, saves it in eventList
@@ -71,5 +70,6 @@ function save(id) {
     packet.type = "SAVE_EVENT";
     stopEditing();
     packet.data = eventDataByID(id);
+	console.log(JSON.stringify(packet));
     socket.send(JSON.stringify(packet));
 }

@@ -130,16 +130,19 @@ function newEventSidebarFromData(newEventData) {
 }
 
 function denyEvent(){
-	console.log("attempting to deny event.");
-	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').show();
 	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').attr('src','images/denyDown.png');
 	eventDataByID(currentlyViewing).attendance = 2
+	rsvpHelp();
 }
 
 function confirmEvent(){
-	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').show();
 	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').attr('src','images/confirmDown.png');
 	eventDataByID(currentlyViewing).attendance = 1
+	rsvpHelp();	
+}
+function rsvpHelp(){
+	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').show();
+	save(currentlyViewing);
 }
 
 $(document).ready(function() {
