@@ -247,3 +247,10 @@ div[contenteditable] {
 	text-align:left;
 	bottom:40px;
 }
+.attendStatusImage {
+    width: 64px;
+    height: 64px;
+    float: right;
+	position:relative;
+	top:-110px;
+}

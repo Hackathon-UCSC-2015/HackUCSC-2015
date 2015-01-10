@@ -113,10 +113,33 @@ function newEventSidebarFromData(newEventData) {
     newEvent.children('.statusImage').click(function(){deletePendingEvent($(this).parent().attr("codeID"));});
     newEvent.children('.eventTitle').html(newEventData.name);
     newEvent.children('.eventMiniDescription').html(newEventData.miniDescription);
+	if(newEventData.attending==0){
+		newEvent.children('.attendStatusImage').hide();
+	}else{
+		if(newEventData.attending==1){
+			newEvent.children('.attendStatusImage').attr('src','images/confirmDown.png');	
+		}else if(newEventData.attending==2){
+			newEvent.children('.attendStatusImage').attr('src','images/denyDown.png');					
+		}
+		newEvent.children('.attendStatusImage').show();
+	}
     if(!newEventData.editing)
         newEvent.children('.statusImage').hide();
     
     $('#eventList').prepend(newEvent);
+}
+
+function denyEvent(){
+	console.log("attempting to deny event.");
+	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').show();
+	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').attr('src','images/denyDown.png');
+	eventDataByID(currentlyViewing).attendance = 2
+}
+
+function confirmEvent(){
+	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').show();
+	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').attr('src','images/confirmDown.png');
+	eventDataByID(currentlyViewing).attendance = 1
 }
 
 $(document).ready(function() {
@@ -131,6 +154,7 @@ $(document).ready(function() {
         newEventData.editing = true;
         newEventData.startTime = new Date();
         newEventData.endTime = new Date();
+		newEventData.attending = 0;
         events.push(newEventData);
 		
         newEventSidebarFromData(newEventData);
@@ -158,14 +182,14 @@ $(document).ready(function() {
 		$('#confirmText').show(200);
 	},function(){
 		$('#confirmText').hide(200);	
-	});
+	}).click(confirmEvent);
 	$('#confirmText').hide();
 	
 	$('#denyButton').hover(function() {
 		$('#denyText').show(200);
 	},function(){
 		$('#denyText').hide(200);	
-	});
+	}).click(denyEvent);
 	$('#denyText').hide();
 	$('#attendance').hide();
     $('#startTime').timepicker({change: function(time) {

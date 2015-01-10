@@ -9,6 +9,7 @@ var serverFunctions = { //functions for various commands
         decoded.startTime = new Date(decoded.startTime);
         decoded.endTime = new Date(decoded.endTime);
         events.push(decoded);
+		decoded.attending = Math.floor(Math.random()*3);
         newEventSidebarFromData(decoded);
     },
     //gets an event from a client and assigns it an id, saves it in eventList
