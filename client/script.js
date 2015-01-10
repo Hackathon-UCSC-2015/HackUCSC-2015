@@ -47,6 +47,7 @@ function stopEditing() {
     $('#eventDetails > span').prop('contentEditable', false);
     $('#eventDetails > span').get(0).removeEventListener('input', miniDescriptionCallback);
     $('#description').prop('contentEditable', false);
+    $('.timePicker').prop('readonly', true);
     eventDataByID(currentlyViewing).editing = false;
 }
 
@@ -68,6 +69,7 @@ function displayEvent(eventID) {
         $('#eventDetails > span').get(0).addEventListener('input', miniDescriptionCallback);
         $('#description').html(data.description).prop('contentEditable', true);
         $('#eventDetails > img').attr('src','images/'+data.imageName);
+        $('.timePicker').prop('readonly', false);
     }
 }
 
@@ -102,6 +104,8 @@ $(document).ready(function() {
 		newEventData.imageName = "sampleImages/sampleEvent"+Math.floor(Math.random()*15)+".jpg";
         newEventData.groupID = 0;
         newEventData.editing = true;
+        newEventData.startTime = new Date();
+        newEventData.endTime = new Date();
         events.push(newEventData);
 		
         newEventSidebarFromData(newEventData);
@@ -114,4 +118,26 @@ $(document).ready(function() {
     $('#loginButton').click(function() {
         window.location.replace("/auth/google/");
     });
+    
+    $('#startTime').timepicker({change: function(time) {
+        var data = eventDataByID(currentlyViewing);
+        if(data.editing) {
+            $('#endTime').timepicker({minTime: time});
+            var data = eventDataByID(currentlyViewing);
+            data.startTime.setHours(time.getHours());
+            data.startTime.setMinutes(time.getMinutes());
+        } else {
+            $('#startTime').val($(this).timepicker().format(data.startTime));
+        }
+    }});
+    
+    $('#endTime').timepicker({change: function(time) {
+        var data = eventDataByID(currentlyViewing);
+        if(data.editing) {
+            data.endTime.setHours(time.getHours());
+            data.endTime.setMinutes(time.getMinutes());
+        } else {
+            $('#endTime').val($(this).timepicker().format(data.endTime));
+        }
+    }});
 });
