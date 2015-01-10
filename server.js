@@ -41,38 +41,38 @@ app.get('/auth/google',
 app.get('/auth/google/callback',
 	passport.authenticate('google', {successRedirect: '/',failureRedirect: '/fail'}),
 	function(req, res){
-		console.log("/auth/google/callback");
+	    console.log("/auth/google/callback");
 	}
-	);
+       );
 
 var request = function(accessToken, refreshToken, profile, done)
 {
-	console.log("test");
-	process.nextTick(
-		function()
-		{
-			console.log('here');
-			console.log("User Id: "+profile.id);
-			console.log("Display Name: "+profile.displayName);
-			console.log("Email: "+profile.emails);
-			console.log("Access Token: "+accessToken);
-
-			return done(null, profile);
-
-		//return done(null, profile);
-		});
-	
+    console.log("test");
+    process.nextTick(
+	function()
+	{
+	    console.log('here');
+	    console.log("User Id: "+profile.id);
+	    console.log("Display Name: "+profile.displayName);
+	    console.log("Email: "+profile.emails);
+	    console.log("Access Token: "+accessToken);
+            
+	    return done(null, profile);
+            
+	    //return done(null, profile);
+	});
+    
 };
 
 passport.use(
-	new gstrat(
+    new gstrat(
 	{
-		clientID: clientId,
-		clientSecret: clientSecret,
-		callbackURL: 'http://localhost:3000/auth/google/callback',
+	    clientID: clientId,
+	    clientSecret: clientSecret,
+	    callbackURL: 'http://localhost:3000/auth/google/callback',
 	},
 	request
-	)
+    )
 );
 
 passport.serializeUser(function(user, done) {
