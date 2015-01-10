@@ -158,7 +158,7 @@ $(document).ready(function() {
         newEventData.name = getName();
         newEventData.miniDescription = getContent();
         newEventData.description = "Enter a long description here";
-		newEventData.imageName = "sampleImages/sampleEvent"+Math.floor(Math.random()*15)+".jpg";
+		newEventData.imageName = "sampleImages/sampleEvent"+Math.floor(Math.random()*18)+".jpg";
         newEventData.groupID = 0;
         newEventData.editing = true;
         newEventData.startTime = new Date();
