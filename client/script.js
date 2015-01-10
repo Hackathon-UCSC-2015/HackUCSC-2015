@@ -79,6 +79,7 @@ $(document).ready(function() {
             newEvent.addClass('selected');
             currentlyViewing = newEvent.attr("codeID");
             displayEvent(newEvent.attr('codeID'));
+
         });
         newEventData.name = newEvent.children('.eventTitle').html();
         newEventData.miniDescription = newEvent.children('.eventMiniDescription').html();
