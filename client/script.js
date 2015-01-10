@@ -12,7 +12,7 @@ socket.onmessage = function(event) {
 }
 
 function loadEvent(event) {
-    $('eventDetails > h2').html(event.children('.eventTitle').html());
+    $('#eventDetails > h2').html(event.children('.eventTitle').html());
 }
 
 $(document).ready(function() {
