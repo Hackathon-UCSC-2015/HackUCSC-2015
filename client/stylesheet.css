@@ -4,11 +4,11 @@ body{
 }
 
 #eventlist {
-    background-color:#8FBC8F;
+    background-color:#FFFAF0;
     float:left;
 	position:fixed;
 	top:0px;
-	left:0px;
+	left:200px;
     width:300px;
     height:100%;  
 	margin-top:50px;
@@ -45,7 +45,7 @@ body{
 	z-index:2;
 }
 
-#eventTemplate {
+#eventTemplate, #groupTemplate {
     display: none;
 }
 
@@ -79,8 +79,8 @@ body{
 	z-index:3;
 	height: -webkit-calc(100% - 60px); 
 	height: -moz-calc(100% - 60px); 
-	width: -webkit-calc(100% - 310px); 
-	width: -moz-calc(100% - 310px); 
+	width: -webkit-calc(100% - 510px); 
+	width: -moz-calc(100% - 510px); 
 }
 .statusImage {
     width: 32px;
@@ -142,4 +142,28 @@ body{
 	top:5px;
 	left:50px;
 	font-family:"MS Serif", "New York", serif;
+}
+#groupList{
+    background-color:#FFFAF0;
+  	position:fixed;
+	top:0px;
+	left:0px;
+    width:200px;
+    height:100%;  
+	margin-top:50px;
+	overflow:scroll;
+}
+.group {
+	border-bottom:#333 1px solid;
+	padding:5px;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+.group:hover {
+	cursor:pointer;
+	background-color:#FFF8DC;	
+}
+.group:active {
+	cursor:pointer;
+	background-color:#E6E1B8;
 }
