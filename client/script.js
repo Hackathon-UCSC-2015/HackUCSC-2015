@@ -19,6 +19,10 @@ function eventDataByID(id) {
     return events[i];
 }
 
+function replaceEvent(event) {
+    var i = eventDataIndexByID(id)
+}
+
 function deleteEvent(eventID) {
     events.splice(eventDataIndexByID(eventID), 1);
     eventSidebarElementByID(eventID).remove();
@@ -99,16 +103,9 @@ function deletePendingEvent(eventID) {
 	stopEditing();
 }
 
-function newEventSidebarFromData(newEventData) {
-    var newEvent = $('#eventTemplate').clone();
-    newEvent.show();
-    newEvent.attr("codeID", newEventData.id);
-    newEvent.click(function() {
-        $('.event').removeClass('selected');
-        newEvent.addClass('selected');
-        currentlyViewing = newEvent.attr("codeID");
-        displayEvent(newEvent.attr('codeID'));
-    });
+function syncSideBarWithData(eventID) {
+    var newEventData = eventDataByID(eventID);
+    var newEvent = eventSidebarElementByID(eventID);
     newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
     newEvent.children('.statusImage').click(function(){deletePendingEvent($(this).parent().attr("codeID"));});
     newEvent.children('.eventTitle').html(newEventData.name);
@@ -125,23 +122,32 @@ function newEventSidebarFromData(newEventData) {
 	}
     if(!newEventData.editing)
         newEvent.children('.statusImage').hide();
+}
+
+function newEventSidebarFromData(newEventData) {
+    var newEvent = $('#eventTemplate').clone();
+    newEvent.show();
+    newEvent.attr("codeID", newEventData.id);
+    newEvent.click(function() {
+        $('.event').removeClass('selected');
+        newEvent.addClass('selected');
+        currentlyViewing = newEvent.attr("codeID");
+        displayEvent(newEvent.attr('codeID'));
+    });
     
     $('#eventList').prepend(newEvent);
+    syncSideBarWithData(newEventData.id);
 }
 
 function denyEvent(){
-	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').attr('src','images/denyDown.png');
-	eventDataByID(currentlyViewing).attendance = 2
-	rsvpHelp();
+	eventDataByID(currentlyViewing).attendance = 2;
+    syncSideBarWithData(currentlyViewing);
+	save(currentlyViewing);
 }
 
 function confirmEvent(){
-	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').attr('src','images/confirmDown.png');
-	eventDataByID(currentlyViewing).attendance = 1
-	rsvpHelp();	
-}
-function rsvpHelp(){
-	eventSidebarElementByID(currentlyViewing).children('.attendStatusImage').show();
+	eventDataByID(currentlyViewing).attendance = 1;
+    syncSideBarWithData(currentlyViewing);
 	save(currentlyViewing);
 }
 

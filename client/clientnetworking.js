@@ -6,10 +6,16 @@ var serverFunctions = { //functions for various commands
     "LOAD_EVENT": function(decoded){
         //JSON.stringify turns a date object to a string, and then JSON.parse parses it as a string again
         //so we have to remake the date objects
-        decoded.startTime = new Date(decoded.startTime);
-        decoded.endTime = new Date(decoded.endTime);
-        events.push(decoded);
-        newEventSidebarFromData(decoded);
+        var data = eventDataByID(decoded.id);
+        if(data === undefined) {
+            decoded.startTime = new Date(decoded.startTime);
+            decoded.endTime = new Date(decoded.endTime);
+            events.push(decoded);
+            newEventSidebarFromData(decoded);
+        } else {
+            data = decoded;
+            syncSideBarWithData(data.id);
+        }
     },
     //gets an event from a client and assigns it an id, saves it in eventList
     //and sends the whole event back to the client
