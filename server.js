@@ -54,8 +54,9 @@ var serverFunctions = { //functions for various commands
     "SAVE_EVENT": function(decoded, ws){
         decoded.data.id = events.length;
         events.push(decoded.data);
-        broadcast(getGroup(decoded.data.groupID), JSON.stringify({type: "SAVE_EVENT",
-                                                      data: decoded.data}));
+        broadcast(getGroup(decoded.data.groupID),
+                  JSON.stringify({type: "SAVE_EVENT",
+                                  data: decoded.data}));
     },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded, ws){
@@ -118,7 +119,7 @@ wss.on('connection', function(ws){
 
 //save the schedule and events and groups to file
 function saveAllData(){
-    fs.writeFileSync('./server_files/data',
+    fs.writeFileSync(__dirname+'/server_files/data',
                      JSON.stringify({
                          events: events,
                          schedules: schedules,
@@ -127,7 +128,7 @@ function saveAllData(){
 }
 
 function loadAllData(){
-    var data = JSON.parse(readFileSync('./server_files/data', 'utf8'));
+    var data = JSON.parse(readFileSync(__dirname+'/server_files/data', 'utf8'));
     events = data.events;
     schedules = data.schedules;
     groups = data.groups;
@@ -139,5 +140,11 @@ function pushOnlyOne(array, value){
     }
 }
 
+//create our server file directory
+if (!fs.existsSync(__dirname+'/server_files')){
+    fs.mkdirSync(__dirname+'/server_files');
+}
+fs.writeFileSync(__dirname+'/server_files/data');
+
 //every six minutes save all events and schedules
-setInterval(saveAllData, 6*60*1000);
+setInterval(saveAllData, 2000);
