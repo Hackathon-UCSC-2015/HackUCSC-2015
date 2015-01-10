@@ -1,4 +1,5 @@
 var events = [];
+var currentlyEditing = "";
 
 function eventDataByID(id) {
     for (var i = 0; i < events.length; i++) {
@@ -8,12 +9,22 @@ function eventDataByID(id) {
     }
 }
 
+
+
+function stopEditing() {
+    eventSidebarElementByID(currentlyEditing).children('.statusImage').hide();
+    $('#eventDetails > h2').html(data.name).prop('contentEditable', false);
+    $('#eventDetails > span').html(data.miniDescription).prop('contentEditable', false);
+    $('#description').html(data.description).prop('contentEditable', false);
+}
+
 function eventSidebarElementByID(id) {
     return $('#eventList').children('div[codeID="'+id+'"]');
 }
 
 function prepareNewEvent(event) {
     var data = eventDataByID(event.attr('codeID'));
+    currentlyEditing = data.id;
     $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
     $('#eventDetails > h2').get(0).addEventListener('input', function() {
         data.name = $('#eventDetails > h2').html();
@@ -50,5 +61,9 @@ $(document).ready(function() {
         events.push(newEventData);
 		
         $('#eventList').prepend(newEvent);
+    });
+    
+    $('saveButton').click(function() {
+        save(currentlyEditing);
     });
 });
