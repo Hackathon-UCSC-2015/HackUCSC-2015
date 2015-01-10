@@ -221,7 +221,7 @@ function loadAllData(){
     var data = JSON.parse(readFileSync(__dirname+'/server_files/data', 'utf8'));
     events = data.events1;
     schedules = data.schedules1;
-    groups = data.groups1;
+    groups = data.groups1; //make this work
 }
 
 function pushOnlyOne(array, value){
@@ -237,4 +237,4 @@ if (!fs.existsSync(__dirname+'/server_files')){
 fs.writeFileSync(__dirname+'/server_files/data');
 
 //every six minutes save all events and schedules
-setInterval(saveAllData, 2000);
+setInterval(saveAllData, 2*60*1000);
