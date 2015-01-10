@@ -11,6 +11,12 @@ var fs = require('fs');
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({port:8080});
 
+wss.broadcast = function(data){
+    wss.clients.forEach(function(client){
+        client.send(data);
+    });
+};
+
 //var cal = require('./calendar.js');
 //var data = cal.getCalData();
 //console.log(data.name +'\n'+data.startTime +'\n'+data.endTime);
@@ -23,11 +29,12 @@ var scheduleList = [];
 var groupIDNumber = 0;
 var groupList = [];
 
+//turn the following wss.broadcast into a groupwise broadcast
 var serverFunctions = { //functions for various commands
     //gets an event of a specified id from eventList and sends it as a jsonified
     //string to the user who requested it
     "LOAD_EVENT": function(decoded, ws){
-        ws.send(JSON.stringify({type: "LOAD_EVENT", 
+        ws.send(JSON.stringify({type: "LOAD_EVENT",
                                 data: eventList[decoded.data]}));
     },
     //gets an event from a client and assigns it an id, saves it in eventList
@@ -35,8 +42,8 @@ var serverFunctions = { //functions for various commands
     "SAVE_EVENT": function(decoded, ws){
         decoded.data.id = eventIDNumber++;
         eventList.push(decoded.data);
-        ws.send(JSON.stringify({type: "SAVE_EVENT",
-                                data: decoded.data}));
+        wss.broadcast(JSON.stringify({type: "SAVE_EVENT",
+                                      data: decoded.data}));
     },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded, ws){
@@ -47,8 +54,8 @@ var serverFunctions = { //functions for various commands
     "SAVE_SCHEDULE": function(decoded, ws){
         decoded.data.id = scheduleIDNumber++;
         scheduleList.push(decoded.data);
-        ws.send(JSON.stringify({type: "SAVE_SCHEDULE",
-                                data: decoded.data}));
+        wss.send(JSON.stringify({type: "SAVE_SCHEDULE",
+                                 data: decoded.data}));
     },
     "ENTER_GROUP": function(decoded, ws){
         
@@ -57,7 +64,16 @@ var serverFunctions = { //functions for various commands
         
     },
     "LIST_EVENTS": function(decoded, ws){
-        
+        ws.send(JSON.stringify({type: "LIST_EVENTS",
+                                data: eventList}));
+    },
+    "LIST_SCHEDULES": function(decoded, ws){
+        ws.send(JSON.stringify({type: "LIST_SCHEDULES",
+                                data: scheduleList}));
+    },
+    "LIST_GROUPS": function(decoded, ws){
+        ws.send(JSON.stringify({type: "LIST_GROUPS",
+                                data: groupList}));
     },
     "ADD_COMMENT": function(decoded, ws){
         
@@ -79,7 +95,7 @@ wss.on('connection', function(ws){
         }
     });
     //every six minutes save all events and schedules
-    //setInterval(saveAllData, 6*60*1000);
+    setInterval(saveAllData, 6*60*1000);
 });
 
 //save the schedule and events and groups to file
