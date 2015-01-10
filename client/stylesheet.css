@@ -6,3 +6,7 @@
     height: 100%;
     
 }
+
+#eventTemplate {
+    display: none;
+}
