@@ -11,12 +11,6 @@ var fs = require('fs');
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({port:8080});
 
-wss.broadcast = function(data){
-    wss.clients.forEach(function(client){
-        client.send(data);
-    });
-};
-
 //var cal = require('./calendar.js');
 //var data = cal.getCalData();
 //console.log(data.name +'\n'+data.startTime +'\n'+data.endTime);
@@ -26,17 +20,21 @@ var events = [];
 var schedules = [];
 
 //group object
-Group = function() { 
+Group = function() {
     this.events = []; 
     this.users = [];
+    this.id = groupID++;
 };
 
+var groupID = 0;
 var globalGroup = new Group();
 var groups = [globalGroup];
 
 //broadcast a message to a group
 function broadcast(group, data){
-
+    group.users.forEach(function(client){
+        client.send(data);
+    });
 }
 
 var serverFunctions = { //functions for various commands
@@ -51,8 +49,8 @@ var serverFunctions = { //functions for various commands
     "SAVE_EVENT": function(decoded, ws){
         decoded.data.id = events.length;
         events.push(decoded.data);
-        wss.broadcast(JSON.stringify({type: "SAVE_EVENT",
-                                      data: decoded.data}));
+        broadcast(decoded.data.group, JSON.stringify({type: "SAVE_EVENT",
+                                                      data: decoded.data}));
     },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded, ws){
@@ -63,8 +61,8 @@ var serverFunctions = { //functions for various commands
     "SAVE_SCHEDULE": function(decoded, ws){
         decoded.data.id = schedules.length;
         schedules.push(decoded.data);
-        wss.send(JSON.stringify({type: "SAVE_SCHEDULE",
-                                 data: decoded.data}));
+        ws.send(JSON.stringify({type: "SAVE_SCHEDULE",
+                                data: decoded.data}));
     },
     "ENTER_GROUP": function(decoded, ws){
         
@@ -106,8 +104,8 @@ wss.on('connection', function(ws){
             console.log('Packet type '+decoded.type+' unknown in '+decoded);
         }
     });
-    //every six minutes save all events and schedules
-    setInterval(saveAllData, 6*60*1000);
+    ws.IDNumber = globalGroup.length;
+    globalGroup.push(ws); //add the user to the global userlist
 });
 
 //save the schedule and events and groups to file
@@ -132,3 +130,6 @@ function pushOnlyOne(array, value){
         array.push(value);
     }
 }
+
+//every six minutes save all events and schedules
+setInterval(saveAllData, 6*60*1000);
