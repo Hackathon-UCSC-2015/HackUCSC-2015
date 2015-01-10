@@ -9,11 +9,27 @@ var serverFunctions = { //functions for various commands
     //gets an event from a client and assigns it an id, saves it in eventList
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded){
-        var eventData = eventDataByID(currentlyEditing);
+        var eventData = eventDataByID(currentlyViewing);
+        console.log(decoded.id);
         eventData.id = decoded.id;
-        var eventSidebar = eventSidebarElementByID(currentlyEditing);
-        eventSidebar.id = decoded.id;
+        var eventSidebar = eventSidebarElementByID(currentlyViewing);
+        eventSidebar.attr('codeID', decoded.id);
         stopEditing();
+        eventSidebar.off('click');
+        eventSidebar.click(function() {
+            //TODO: When editing a previously convfirmed event and click off, don't delete it but instead revert it
+            if(editing && currentlyViewing != "" && eventSidebar.attr('codeID') != currentlyViewing) {
+                deleteEvent(currentlyViewing);
+                stopEditing();
+            }
+            if (eventSidebar.attr('codeID') != currentlyViewing) {
+                $('.event').removeClass('selected');
+                eventSidebar.addClass('selected');
+                currentlyViewing = eventSidebar.attr("codeID");
+                stopEditing();
+                displayEvent(currentlyViewing);
+            }
+        });
     },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded){
@@ -63,5 +79,5 @@ function save(id) {
     var packet = {};
     packet.type = "SAVE_EVENT";
     packet.data = eventDataByID(id);
-    socket.send(packet);
+    socket.send(JSON.stringify(packet));
 }

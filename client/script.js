@@ -28,15 +28,23 @@ var headerCallback = function() {
 
 function stopEditing() {
     eventSidebarElementByID(currentlyViewing).children('.statusImage').hide();
-    $('#eventDetails > h2').html(data.name).prop('contentEditable', false);
+    $('#eventDetails > h2').prop('contentEditable', false);
     $('#eventDetails > h2').get(0).removeEventListener('input', headerCallback);
-    $('#eventDetails > span').html(data.miniDescription).prop('contentEditable', false);
-    $('#description').html(data.description).prop('contentEditable', false);
+    $('#eventDetails > span').prop('contentEditable', false);
+    $('#description').prop('contentEditable', false);
     editing = false;
 }
 
 function eventSidebarElementByID(id) {
     return $('#eventList').children('div[codeID="'+id+'"]');
+}
+
+function displayEvent(eventID) {
+    var data = eventDataByID(eventID);
+    $('#eventDetails > h2').html(data.name);
+    $('#eventDetails > span').html(data.miniDescription);
+    $('#description').html(data.description);
+    $('#eventDetails > img').attr('src','images/'+data.imageName);
 }
 
 function prepareNewEvent(event) {
@@ -58,7 +66,6 @@ function prepareNewEvent(event) {
 
 $(document).ready(function() {
     $('#addEvent').click(function() {
-        console.log('Add event!');
         var newEvent = $('#eventTemplate').clone();
         newEvent.show();
         var newEventData = {};
@@ -67,19 +74,20 @@ $(document).ready(function() {
         newEvent.click(function() {
             if(editing && currentlyViewing != "" && newEvent.attr('codeID') != currentlyViewing) {
                 deleteEvent(currentlyViewing);
+                stopEditing();
             }
             if (newEvent.attr('codeID') != currentlyViewing) {
                 $('.event').removeClass('selected');
                 newEvent.addClass('selected');
                 currentlyViewing = newEvent.attr("codeID");
+                console.log(newEvent.attr('codeID'));
                 prepareNewEvent(newEvent);
             }
         });
         newEventData.name = newEvent.children('.eventTitle').html();
         newEventData.miniDescription = newEvent.children('.eventMiniDescription').html();
         newEventData.description = "Enter a long description here";
-		newEventData.imageName = "sampleEvent"+Math.floor(Math.random()*8)+".jpg"
-		console.log(newEventData.imageName);
+		newEventData.imageName = "sampleEvent"+Math.floor(Math.random()*8)+".jpg";
 		newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
         events.push(newEventData);
 		
