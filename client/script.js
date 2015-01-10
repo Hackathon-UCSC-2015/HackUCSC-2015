@@ -23,7 +23,17 @@ function deleteEvent(eventID) {
 var headerCallback = function() {
     var data = eventDataByID(currentlyViewing);
     data.name = $('#eventDetails > h2').html();
-    eventSidebarElementByID(data.id).children('.eventTitle').html(data.name);
+    if(data.name<100) {
+        eventSidebarElementByID(data.id).children('.eventTitle').html(data.name);
+    }
+}
+
+var miniDescriptionCallback = function() {
+    var data = eventDataByID(currentlyViewing);
+    data.miniDescription = $('#eventDetails > span').html();
+    if(data.miniDescription<100) {
+        eventSidebarElementByID(data.id).children('.eventMiniDescription').html(data.miniDescription);
+    }
 }
 
 function stopEditing() {
@@ -31,6 +41,7 @@ function stopEditing() {
     $('#eventDetails > h2').prop('contentEditable', false);
     $('#eventDetails > h2').get(0).removeEventListener('input', headerCallback);
     $('#eventDetails > span').prop('contentEditable', false);
+    $('#eventDetails > span').get(0).removeEventListener('input', miniDescriptionCallback);
     $('#description').prop('contentEditable', false);
     editing = false;
 }
@@ -55,10 +66,7 @@ function prepareNewEvent(event) {
         $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
         $('#eventDetails > h2').get(0).addEventListener('input', headerCallback);
         $('#eventDetails > span').html(data.miniDescription).prop('contentEditable', true);
-        $('#eventDetails > span').get(0).addEventListener('input', function() {
-            data.miniDescription = $('#eventDetails > span').html();
-            eventSidebarElementByID(data.id).children('.eventMiniDescription').html(data.miniDescription);
-        });
+        $('#eventDetails > span').get(0).addEventListener('input', miniDescriptionCallback);
         $('#description').html(data.description).prop('contentEditable', true);
         $('#eventDetails > img').attr('src','images/'+data.imageName);
     }

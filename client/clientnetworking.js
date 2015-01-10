@@ -27,6 +27,7 @@ var serverFunctions = { //functions for various commands
                 $('.event').removeClass('selected');
                 eventSidebar.addClass('selected');
                 currentlyViewing = eventSidebar.attr("codeID");
+                console.log(currentlyViewing);
                 stopEditing();
                 displayEvent(currentlyViewing);
             }
