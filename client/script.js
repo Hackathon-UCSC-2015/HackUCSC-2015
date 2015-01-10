@@ -30,7 +30,7 @@ function prepareNewEvent(event) {
     $('#eventDetails > h2').html(data.title).prop('contentEditable', true);
     $('#eventDetails > span').html(data.miniDescription).prop('contentEditable', true);
     $('#description').html(data.description).prop('contentEditable', true);
-	$('#eventDetails > img').attr('src','images/sampleEvent.jpg');
+	$('#eventDetails > img').attr('src','images/sampleEvent0.jpg');
 }
 
 $(document).ready(function() {
@@ -49,7 +49,11 @@ $(document).ready(function() {
         newEventData.title = newEvent.children('.eventTitle').html();
         newEventData.miniDescription = newEvent.children('.eventMiniDescription').html();
         newEventData.description = "Enter a long description here";
+		newEventData.imageName = "sampleEvent"+Math.floor(Math.random()*3)+".jpg"
+		console.log(newEventData.imageName);
+		newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
         events.push(newEventData);
+		
         $('#eventList').prepend(newEvent);
     });
 });
