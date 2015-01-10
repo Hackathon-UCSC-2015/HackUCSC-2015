@@ -1,6 +1,6 @@
 
 body{
-	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-family:"wf_segoe-ui_light", Arial, Helvetica, sans-serif;
 }
 
 #eventlist {
@@ -133,11 +133,13 @@ body{
 	right:10px;
 	padding:5px;
 	margin:5px;
-	background-color:#66cc66;
-	border-radius:10px;
+	/*background-color:#66cc66;
+	border-radius:10px;*/
 }
 #logo {
 	font-size:40px;
-	padding:5px;
+	position:fixed;
+	top:5px;
+	left:50px;
 	font-family:"MS Serif", "New York", serif;
 }
