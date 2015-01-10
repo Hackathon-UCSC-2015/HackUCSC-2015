@@ -49,6 +49,7 @@ function stopEditing() {
     $('#description').prop('contentEditable', false);
     $('.timePicker').prop('readonly', true);
     eventDataByID(currentlyViewing).editing = false;
+	$('#saveButton').hide(100);
 }
 
 function eventSidebarElementByID(id) {
@@ -61,16 +62,31 @@ function displayEvent(eventID) {
     $('#eventDetails > h2').html(data.name);
     $('#eventDetails > span').html(data.miniDescription);
     $('#description').html(data.description);
-    $('#eventDetails > img').attr('src','images/'+data.imageName);
+    $('#eventDetails > #eventImage').html('<img src="images/'+data.imageName+'" />');
+	$('#saveButton').hide();
     if(data.editing) {
         $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
         $('#eventDetails > h2').get(0).addEventListener('input', headerCallback);
         $('#eventDetails > span').html(data.miniDescription).prop('contentEditable', true);
         $('#eventDetails > span').get(0).addEventListener('input', miniDescriptionCallback);
         $('#description').html(data.description).prop('contentEditable', true);
-        $('#eventDetails > img').attr('src','images/'+data.imageName);
+		$('#saveButton').show();
         $('.timePicker').prop('readonly', false);
     }
+}
+
+function clearContentFrame(){
+    $('#eventDetails > h2').html('');
+    $('#eventDetails > span').html('');
+    $('#description').html('');
+    $('#eventDetails > #eventImage').html('');
+	$('#saveButton').hide();
+}
+
+function deletePendingEvent(eventID) {
+	deleteEvent(eventID);
+	clearContentFrame();
+	stopEditing();
 }
 
 function newEventSidebarFromData(newEventData) {
@@ -82,10 +98,9 @@ function newEventSidebarFromData(newEventData) {
         newEvent.addClass('selected');
         currentlyViewing = newEvent.attr("codeID");
         displayEvent(newEvent.attr('codeID'));
-
     });
     newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
-    newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));stopEditing();});
+    newEvent.children('.statusImage').click(function(){deletePendingEvent($(this).parent().attr("codeID"));});
     newEvent.children('.eventTitle').html(newEventData.name);
     newEvent.children('.eventMiniDescription').html(newEventData.miniDescription);
     if(!newEventData.editing)
@@ -114,6 +129,8 @@ $(document).ready(function() {
     $('#saveButton').click(function() {
         save(currentlyViewing);
     });
+	
+	$('#saveButton').hide();
     
     $('#loginButton').click(function() {
         window.location.replace("/auth/google/");
