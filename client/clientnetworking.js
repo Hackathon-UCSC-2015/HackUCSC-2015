@@ -45,6 +45,7 @@ socket.onopen = function() {
     var packet = {};
     packet.type = "LIST_EVENTS";
     socket.send(JSON.stringify(packet));
+    console.log("Sent LIST_EVENTS");
 }
 
 socket.onmessage = function(event) {
@@ -52,7 +53,7 @@ socket.onmessage = function(event) {
     var fn = serverFunctions[data.type];
     console.log('Received '+data.type);
     if (fn){
-        fn(decoded); //run the function if we find it in our table
+        fn(data); //run the function if we find it in our table
     } else {
         console.log('Packet type '+data.type+' unknown in '+data);
     }
