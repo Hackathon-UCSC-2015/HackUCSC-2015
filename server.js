@@ -15,7 +15,6 @@ var wss = new WebSocketServer({port:8080});
 //var data = cal.getCalData();
 //console.log(data.name +'\n'+data.startTime +'\n'+data.endTime);
 
-//really nasty stuff follows
 var events = [];
 var schedules = [];
 
@@ -105,7 +104,7 @@ wss.on('connection', function(ws){
         }
     });
     ws.IDNumber = globalGroup.length;
-    globalGroup.push(ws); //add the user to the global userlist
+    globalGroup.users.push(ws); //add the user to the global userlist
 });
 
 //save the schedule and events and groups to file
