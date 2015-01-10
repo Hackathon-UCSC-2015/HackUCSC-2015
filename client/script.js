@@ -140,13 +140,13 @@ function newEventSidebarFromData(newEventData) {
 }
 
 function denyEvent(){
-	eventDataByID(currentlyViewing).attendance = 2;
+	eventDataByID(currentlyViewing).attending = 2;
     syncSideBarWithData(currentlyViewing);
 	save(currentlyViewing);
 }
 
 function confirmEvent(){
-	eventDataByID(currentlyViewing).attendance = 1;
+	eventDataByID(currentlyViewing).attending = 1;
     syncSideBarWithData(currentlyViewing);
 	save(currentlyViewing);
 }

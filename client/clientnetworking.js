@@ -75,7 +75,6 @@ function save(id) {
     var packet = {};
     packet.type = "SAVE_EVENT";
     stopEditing();
-    packet.data = eventDataByID(id);
-	console.log(JSON.stringify(packet));
+    packet.data = eventDataByID(id)
     socket.send(JSON.stringify(packet));
 }
