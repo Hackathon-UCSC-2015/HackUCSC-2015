@@ -84,7 +84,7 @@ $(document).ready(function() {
         newEventData.name = newEvent.children('.eventTitle').html();
         newEventData.miniDescription = newEvent.children('.eventMiniDescription').html();
         newEventData.description = "Enter a long description here";
-		newEventData.imageName = "sampleEvent"+Math.floor(Math.random()*10)+".jpg";
+		newEventData.imageName = "sampleEvent"+Math.floor(Math.random()*14)+".jpg";
         newEventData.groupID = 0;
         newEventData.editing = true;
 		newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
