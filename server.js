@@ -11,12 +11,19 @@ var fs = require('fs');
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({port:8080});
 
+var cal = require('./calendar.js');
+var data = cal.getCalData();
+console.log(data.name +'\n'+data.startTime +'\n'+data.endTime);
+
+var eventIDNumber = 0;
+var eventList = [];
+
 var serverFunctions = { //functions for various commands
     "LOAD_EVENT": function(decoded){
         
     },
     "SAVE_EVENT": function(decoded){
-        
+        decoded.data.id = eventIDNumber++;
     },
     "LOAD_SCHEDULE": function(decoded){
         
