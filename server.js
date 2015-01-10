@@ -11,6 +11,9 @@ var fs = require('fs');
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({port:8080});
 
+//uuid
+var uuid = require('node-uuid');
+
 //var cal = require('./calendar.js');
 //var data = cal.getCalData();
 //console.log(data.name +'\n'+data.startTime +'\n'+data.endTime);
@@ -118,13 +121,12 @@ passport.deserializeUser(function(obj, done)
 
 
 
-var userID = 0;
 User = function(wsID){
     this.socketID = wsID;
     this.name = "";
     this.groups = [];
     this.connectionClosed = false;
-    this.id = userID++;
+    this.id = uuid.v4();
 }
 var users = [];
 
@@ -167,6 +169,15 @@ function broadcastAllBut(group, data, user){
             getSocket(client).send(data);
         }
     });
+}
+
+function getUser(userList, id){
+    for (var i = 0; i < userList; i++){
+        if (userList[i].id == id){
+            return userList[i];
+        }
+    }
+    return null;
 }
 
 function getGroup(ID){
@@ -265,6 +276,7 @@ var serverFunctions = { //functions for various commands
     },
 };
 
+//write to use uuids
 wss.on('connection', function(ws){
     console.log('user connected');
     ws.on('message', function(packet){
