@@ -23,6 +23,7 @@ Group = function() {
     this.events = []; 
     this.users = [];
     this.id = groupID++;
+    
 };
 
 var groupID = 0;
@@ -34,6 +35,10 @@ function broadcast(group, data){
     group.users.forEach(function(client){
         client.send(data);
     });
+}
+
+function getGroup(ID){
+    return groups[ID];
 }
 
 var serverFunctions = { //functions for various commands
@@ -48,7 +53,7 @@ var serverFunctions = { //functions for various commands
     "SAVE_EVENT": function(decoded, ws){
         decoded.data.id = events.length;
         events.push(decoded.data);
-        broadcast(decoded.data.group, JSON.stringify({type: "SAVE_EVENT",
+        broadcast(getGroup(decoded.data.groupID), JSON.stringify({type: "SAVE_EVENT",
                                                       data: decoded.data}));
     },
     //the same as above except for schedules
