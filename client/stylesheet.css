@@ -6,7 +6,6 @@
 	top:0px;
 	left:0px;
     width:300px;
-<<<<<<< HEAD
     height:100%;
 	padding:50px;    
 }
@@ -20,11 +19,9 @@
 }
 #loginButton:hover {
 	color:#09C
-=======
     height: 100%;
 	margin-top:50px;
     position: relative;
->>>>>>> FETCH_HEAD
 }
 
 #header {
