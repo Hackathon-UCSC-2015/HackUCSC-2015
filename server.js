@@ -308,8 +308,8 @@ var serverFunctions = { //functions for various commands
                         log(1,"They have access to the event");
                         //replace our old event
                         group.events[decoded.data.id] = decoded.data;
-                        broadcastAll(group, JSON.stringify({type: "SAVE_EVENT",
-                                                               data: decoded.data}));
+                        broadcast(group, JSON.stringify({type: "SAVE_EVENT",
+                                                         data: decoded.data}));
                     } else {
                         log(1,"they have no access");
                         return user;
