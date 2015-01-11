@@ -16,6 +16,7 @@ var events = [];
 var currentlyViewing = "";
 var editing = false;
 var idCounter = 0;
+var me = undefined;
 
 function eventDataIndexByID(id) {
     for (var i = 0; i < events.length; i++) {
@@ -166,7 +167,16 @@ function confirmEvent(){
 	save(currentlyViewing);
 }
 
+function login() {
+    $('#loginButton').hide();
+    $('#usernameBox').show();
+    $('#usernameBox > img').attr('src', me._json.picture);
+    $('#usernameBox > span').html(me._json.name);
+    $('#addEvent').show();
+}
+
 $(document).ready(function() {
+    $('#addEvent').hide();
     $('#addEvent').click(function() {
         var newEventData = {};
         newEventData.id = "c"+idCounter++;
@@ -240,7 +250,6 @@ $(document).ready(function() {
     }});
     
     $('#usernameBox').hide();
-    
     
 });
 

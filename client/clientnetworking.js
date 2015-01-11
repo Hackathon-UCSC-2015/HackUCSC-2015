@@ -29,10 +29,8 @@ var serverFunctions = { //functions for various commands
     },
     "GOOGLE_ID_LOGIN": function(decoded) {
         console.log(decoded);
-        $('#loginButton').hide();
-        $('#usernameBox').show();
-        $('#usernameBox > img').attr('src', decoded.profile._json.picture);
-        $('#usernameBox > span').html(decoded.profile._json.name);
+        me = decoded.profile;
+        login();
     },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded){
