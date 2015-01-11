@@ -192,7 +192,6 @@ function getGroup(ID){
 }
 
 function changeAttendance(event, attendance, user){
-    console.log(event);
     var attendingp = 
         event.attending.indexOf(user.profile.id) != -1;
     var notAttendingp = 
@@ -213,6 +212,7 @@ function changeAttendance(event, attendance, user){
             event.attending.splice(event.attending.indexOf(user.profile.id), 1);
         }
     }
+    //console.log(event);
 }
 
 var serverFunctions = { //functions for various commands
