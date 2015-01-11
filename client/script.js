@@ -115,6 +115,8 @@ function displayEvent(eventID) {
     $('#editButton').hide();
     $('#startDate').val(data.startTime.toDateString());
     $('#endDate').val(data.endTime.toDateString());
+    $('#startTime').val(data.startTime.getHours()+":"+data.startTime.getMinutes());
+    $('#endTime').val(data.endTime.getHours()+":"+data.endTime.getMinutes());
 	updateMap(data.location);
 	if(data.attending.length==1){
 		$('#numberAttend').html("1 person attending");
@@ -264,9 +266,20 @@ $(document).ready(function() {
         var startDate = getDate('#startDate');
         var endDate = getDate('#endDate');
         var data = eventDataByID(currentlyViewing);
+        var startTime = parseTime($('#startTime').val());
+        if(!isNaN(startTime)) {
+            data.startTime.setHours(startTime.getHours());
+            data.startTime.setMinutes(startTime.getMinutes());
+        }
         data.startTime.setFullYear(startDate.getFullYear());
         data.startTime.setMonth(startDate.getMonth());
         data.startTime.setDate(startDate.getDate());
+        var endTime = parseTime($('#endTime').val());
+        console.log(endTime);
+        if(!isNaN(endTime)){   
+            data.endTime.setHours(endTime.getHours());
+            data.endTime.setMinutes(endTime.getMinutes());
+        }
         data.endTime.setFullYear(startDate.getFullYear());
         data.endTime.setMonth(startDate.getMonth());
         data.endTime.setDate(startDate.getDate());
@@ -366,4 +379,26 @@ function getDate(date) {
             ret = new Date();
     }
     return ret;
+}
+
+function parseTime(timeStr) {
+    
+    var dt = new Date();
+ 
+    var time = timeStr.match(/(\d+)(?::(\d\d))?\s*(p?)/i);
+    if (!time) {
+        return NaN;
+    }
+    var hours = parseInt(time[1], 10);
+    if (hours == 12 && !time[3]) {
+        hours = 0;
+    }
+    else {
+        hours += (hours < 12 && time[3]) ? 12 : 0;
+    }
+ 
+    dt.setHours(hours);
+    dt.setMinutes(parseInt(time[2], 10) || 0);
+    dt.setSeconds(0, 0);
+    return dt;
 }
