@@ -551,6 +551,6 @@ if (!fs.existsSync(__dirname+'/server_files')){
 fs.writeFileSync(__dirname+'/server_files/data');
 
 //every six minutes save all events and schedules
-//setInterval(function(){ saveAllData(); /*loadAllData();*/ }, 2*60*100);
+//setInterval(function(){ saveAllData(); loadAllData(); }, 1*10*1000);
 //setInterval(loadAllData, 3*60*100);
 setImportance(1);
