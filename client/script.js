@@ -41,6 +41,7 @@ function replaceEvent(event) {
 function deleteEvent(eventID) {
     events.splice(eventDataIndexByID(eventID), 1);
     eventSidebarElementByID(eventID).remove();
+    displayEvent(undefined);
 }
 
 var headerCallback = function() {
@@ -113,16 +114,11 @@ function clearContentFrame(){
 	$('#saveButton').hide();
 }
 
-function deletePendingEvent(eventID) {
-	deleteEvent(eventID);
-	displayEvent(undefined);
-}
-
 function syncSideBarWithData(eventID) {
     var newEventData = eventDataByID(eventID);
     var newEvent = eventSidebarElementByID(eventID);
     newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
-    newEvent.children('.statusImage').click(function(){deletePendingEvent($(this).parent().attr("codeID"));});
+    newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));});
     newEvent.children('.eventTitle').html(newEventData.name);
     newEvent.children('.eventMiniDescription').html(newEventData.miniDescription);
 	if(newEventData.attending==0){
