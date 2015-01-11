@@ -90,10 +90,16 @@ function displayEvent(eventID) {
         $('#saveButton').hide();
         $('#editButton').hide();
         $('.timePicker').prop('readonly', true).val("");
+        $('#eventImage').hide();
+        $('#welcomeMessage').show();
+        $('#timeSelect').hide();
         return;
     }
     var data = eventDataByID(eventID);
     currentlyViewing = eventID;
+    $('#welcomeMessage').hide();
+    $('#eventImage').show();
+    $('#timeSelect').show();
     $('#eventDetails > h2').html(data.name);
     $('#miniDescription').html(data.miniDescription);
     $('#description').html(data.description);
@@ -102,6 +108,11 @@ function displayEvent(eventID) {
     $('#editButton').hide();
     $('#startDate').val(data.startTime.toDateString());
     $('#endDate').val(data.endTime.toDateString());
+	if(data.attending.length==1){
+		$('#numberAttend').html("1 person attending");
+	}else{
+		$('#numberAttend').html(data.attending.length+" people attending");
+	}
     if(data.editing) {
         $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
         $('#eventDetails > h2').get(0).addEventListener('input', headerCallback);
@@ -256,6 +267,7 @@ $(document).ready(function() {
     
     $('#usernameBox').hide();
     
+    displayEvent(undefined);
 });
 
 function getDate(date) {

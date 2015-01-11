@@ -219,14 +219,16 @@ var serverFunctions = { //functions for various commands
     //gets an event of a specified id from eventList and sends it as a jsonified
     //string to the user who requested it
     "ATTENDANCE": function(decoded, user){
-        var group = getGroup(decoded.groupID);
-        if (group){
-            if (group.events[decoded.eventID]){
-                changeAttendance(group.events[decoded.eventID], 
-                                 decoded.attendance, user);
-                broadcast(group, JSON.stringify(
-                    {type: "SAVE_EVENT",
-                     data: group.events[decoded.eventID]}));
+        if (loggedIn(user)){
+            var group = getGroup(decoded.groupID);
+            if (group){
+                if (group.events[decoded.eventID]){
+                    changeAttendance(group.events[decoded.eventID], 
+                                     decoded.attendance, user);
+                    broadcast(group, JSON.stringify(
+                        {type: "SAVE_EVENT",
+                         data: group.events[decoded.eventID]}));
+                }
             }
         }
         return user;
@@ -366,9 +368,6 @@ var serverFunctions = { //functions for various commands
     "ADD_COMMENT": function(decoded, user){
         return user;
     },
-    "OVERWRITE_SCHEDULE": function(decoded, user){
-        return user;
-    },
     "UUID_LOOKUP": function(decoded, user){
         getSocket(user).send(
             JSON.stringify({type: "UUID_LOOKUP",
@@ -389,6 +388,7 @@ var serverFunctions = { //functions for various commands
                                 data: newuser}));
             newuser.socketID = user.socketID;
             newuser.id = user.id;
+            googleIDusers[decoded.data] = null;
             console.log(newuser);
             return newuser;
         }

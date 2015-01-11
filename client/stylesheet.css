@@ -111,7 +111,7 @@ body{
 	cursor: pointer;
 }
 .plusButton:active, #saveButton:active, #editButton:active {
-	color:#6666ff;	
+	color:#6666ff;
 	cursor:pointer;
 }
 .statusImage:hover{
@@ -192,7 +192,7 @@ div[contenteditable] {
 	height:300px;
 }
 #attendance {
-	height:100px;
+	height:130px;
 	width: -webkit-calc(100% - 510px); 
 	width: -moz-calc(100% - 510px); 
 	position:fixed;
