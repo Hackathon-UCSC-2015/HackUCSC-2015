@@ -225,6 +225,9 @@ function login() {
     $('#addEvent').show();
 }
 
+var debounce = false;
+var mouseOver = false;
+
 $(document).ready(function() {
     $('#addEvent').hide();
     $('#addEvent').click(function() {
@@ -306,9 +309,12 @@ $(document).ready(function() {
     $('#usernameBox').hide().hover(function(){
 		$(this).animate({right:"60px"},100);
 		$(this).children("#logout").animate({right:"10px"},100);	
+		debounce = true;
+		mouseOver = true;
+		setTimeout("debounce = false",500);
 	},function(){
-		$(this).animate({right:"0px"},100);
-		$(this).children("#logout").animate({right:"-50px"},100);
+		mouseOver = false;
+		sleepOne();
 	});
 	$('#logout').click(function(){
 		window.location.replace("/index.html");	
@@ -316,6 +322,23 @@ $(document).ready(function() {
     
     displayEvent(undefined);
 });
+
+function sleepOne(){
+	if(debounce){
+		setTimeout("sleepTwo()",100);
+	}else if(!mouseOver){
+		closeLogout();	
+	}
+}
+
+function sleepTwo(){
+	sleepOne();
+}
+
+function closeLogout(){
+	$("#usernameBox").animate({right:"0px"},100);
+	$("#logout").animate({right:"-50px"},100);
+}
 
 function getDate(date) {
     var ret = $(date).datepick('getDate')[0];
