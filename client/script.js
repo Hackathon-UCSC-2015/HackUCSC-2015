@@ -90,10 +90,16 @@ function displayEvent(eventID) {
         $('#saveButton').hide();
         $('#editButton').hide();
         $('.timePicker').prop('readonly', true).val("");
+        $('#eventImage').hide();
+        $('#welcomeMessage').show();
+        $('#timeSelect').hide();
         return;
     }
     var data = eventDataByID(eventID);
     currentlyViewing = eventID;
+    $('#welcomeMessage').hide();
+    $('#eventImage').show();
+    $('#timeSelect').show();
     $('#eventDetails > h2').html(data.name);
     $('#miniDescription').html(data.miniDescription);
     $('#description').html(data.description);
@@ -261,6 +267,7 @@ $(document).ready(function() {
     
     $('#usernameBox').hide();
     
+    displayEvent(undefined);
 });
 
 function getDate(date) {
