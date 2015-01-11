@@ -8,14 +8,8 @@ var gcal = require('google-calendar');
 function parseTime(time)
 {
 	var res = time.split(/[.T\/ -\/ :]/);
-	//res = res.split('T');
-	//res = res.split(':');
 
-	var d = Date(res[0], res[1], res[2], res[3], res[4], res[5], 0);
-	//d.setUTC(res[6]);
-
-console.log(d);
-console.log(res);
+	return new Date(res[0], res[1]-1, res[2], res[3], res[4], res[5], 0, 0);
 
 }
 
@@ -52,8 +46,8 @@ function getGoogleCalendarData(accessToken)
 													description: currentEvent.description,
 
 													//timeZone: currentEvent.start.timeZone,
-													start: currentEvent.start.dateTime,
-													end: currentEvent.end.dateTime
+													start: parseTime(currentEvent.start.dateTime),
+													end: parseTime(currentEvent.end.dateTime)
 										};
 										parseTime(currentEvent.start.dateTime);
 										console.log(calEvent);
