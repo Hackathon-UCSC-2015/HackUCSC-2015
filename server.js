@@ -198,7 +198,7 @@ var serverFunctions = { //functions for various commands
     //gets an event from a client and assigns it an id, saves it in eventList
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded, user){
-        if (authenitcate(user)){
+        if (authenticate(user)){
             var group = getGroup(decoded.data.groupID);
             if (decoded.data.id[0] == 'c'){ //if it's a client id
                 decoded.data.id = group.events.length; //assign an id
