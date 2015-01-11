@@ -282,7 +282,7 @@ var serverFunctions = { //functions for various commands
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded, user){
         if (loggedIn(user)){
-            log(0,user);
+            log(1,user);
             var group = getGroup(decoded.data.groupID);
             if (decoded.data.id[0] == 'c'){ //if it's a client id
                 decoded.data.id = group.events.length; //assign an id
@@ -291,23 +291,26 @@ var serverFunctions = { //functions for various commands
                 decoded.data.notAttending = [];
                 events.push(decoded.data);
                 group.events.push(decoded.data);
-                log(0,"Making new event");
+                log(1,"Making new event");
             } else { //else we're overwriting a currently saved event
-                log(0,"Overwriting old event");
+                log(1,"Overwriting old event");
                 if (group.events[decoded.data.id]){ //if the event exists
-                    log(0,group.events[decoded.data.id]);
+                    log(1, "OLD EVENT");
+                    log(1,group.events[decoded.data.id]);
+                    log(1, "NEW EVENT");
+                    log(1, decoded.data);
                     if (authenticate(user, group.events[decoded.data.id])){
-                        log(0,"They have access to the event");
+                        log(1,"They have access to the event");
                         //replace our old event
                         group.events[decoded.data.id] = decoded.data;
                     } else {
-                        log(0,"they have no access");
+                        log(1,"they have no access");
                         return user;
                     }
                 } else {
-                    log(0,"event doesn't exist");
+                    log(1,"event doesn't exist");
                     //if the event is nonexistent, drop the packet
-                    return user; 
+                    return user;
                 }
             }
             getSocket(user).send(JSON.stringify({type: "SAVE_EVENT",
@@ -315,7 +318,7 @@ var serverFunctions = { //functions for various commands
             broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
                                                    data: decoded.data}), user);
         } else {
-            log(0,"user is not logged in");
+            log(1,"user is not logged in");
         }
         return user;
     },
