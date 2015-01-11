@@ -97,3 +97,13 @@ function save(id) {
     displayEvent(packet.data.id);
     socket.send(JSON.stringify(packet));
 }
+
+function attend(eventID, attendance, group)
+{
+    var packet = {};
+    packet.type = "ATTENDANCE";
+    packet.groupID = group;
+    packet.eventID = eventID;
+    packet.attendance = attendance;
+    socket.send(JSON.stringify(packet));
+}
