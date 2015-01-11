@@ -539,3 +539,4 @@ fs.writeFileSync(__dirname+'/server_files/data');
 
 //every six minutes save all events and schedules
 setInterval(saveAllData, 2*60*1000);
+setImportance(1);
