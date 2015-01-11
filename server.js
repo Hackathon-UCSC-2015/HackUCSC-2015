@@ -509,26 +509,33 @@ wss.on('connection', function(ws){
 //save the schedule and events and groups to file
 function saveAllData(){
     console.log('Beginning save');
-    //console.log(events);
-    console.log(schedules);
-    console.log(groups);
-    console.log(users);
+    var data =  JSON.stringify({
+        users: users,
+        googleIDusers: googleIDusers,
+        schedules: schedules,
+        groupID: groupID,
+        globalGroup: globalGroup,
+        groups: groups,
+        logImportance: logImportance});
+    console.log(data);
     fs.writeFileSync(__dirname+'/server_files/data',
-                     JSON.stringify({
-                         //events: events,
-                         schedules: schedules,
-                         groups: groups,
-                         users: users}));
+                     data);
     console.log('Saved all data.');
 }
 
 //this is basically pointless right now without anything to get it working
 function loadAllData(){
-    var data = JSON.parse(readFileSync(__dirname+'/server_files/data', 'utf8'));
-    //events = data.events;
-    schedules = data.schedules;
-    groups = data.groups;
+    console.log("Beginning load");
+    var data = JSON.parse(fs.readFileSync(__dirname+'/server_files/data', 'utf8'));
+    console.log(data);
     users = data.users;
+    googleIDusers = data.googleIDusers;
+    schedules = data.schedules;
+    groupID = data.groupID;
+    globalGroup = data.globalGroup;
+    groups = data.groups;
+    logImportance = data.logImportance;
+    console.log("Load done");
 }
 
 function pushOnlyOne(array, value){
@@ -544,5 +551,6 @@ if (!fs.existsSync(__dirname+'/server_files')){
 fs.writeFileSync(__dirname+'/server_files/data');
 
 //every six minutes save all events and schedules
-setInterval(saveAllData, 2*60*1000);
+//setInterval(function(){ saveAllData(); /*loadAllData();*/ }, 2*60*100);
+//setInterval(loadAllData, 3*60*100);
 setImportance(1);
