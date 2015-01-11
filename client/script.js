@@ -254,10 +254,10 @@ $(document).ready(function() {
         var data = eventDataByID(currentlyViewing);
         data.startTime.setFullYear(startDate.getFullYear());
         data.startTime.setMonth(startDate.getMonth());
-        data.startTime.setDate(startDate.getDay());
+        data.startTime.setDate(startDate.getDate());
         data.endTime.setFullYear(startDate.getFullYear());
         data.endTime.setMonth(startDate.getMonth());
-        data.endTime.setDate(startDate.getDay());
+        data.endTime.setDate(startDate.getDate());
         data.description = $('#description').html();
         save(currentlyViewing);
     });
