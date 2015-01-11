@@ -96,6 +96,7 @@ function displayEvent(eventID) {
         $('#eventImage').hide();
         $('#welcomeMessage').show();
         $('#timeSelect').hide();
+	    $('#attendance').hide();
         return;
     }
     var data = eventDataByID(eventID);
@@ -137,13 +138,19 @@ function displayEvent(eventID) {
         $('#miniDescription').get(0).addEventListener('input', miniDescriptionCallback);
         $('#description').html(data.description).prop('contentEditable', true);
 		$('#saveButton').show();
-        $('.timePicker').prop('readonly', false);
+        $('#timeSelect > input').prop('readonly', false);
         $('#startDate').datepick({dateFormat: "D M dd yyyy"});
         $('#endDate').datepick({dateFormat: "D M dd yyyy"});
 		$('#attendance').hide();
 		$('#editButton').hide();
     }else{
+        $('#eventDetails > h2').html(data.name).prop('contentEditable', false);
+        $('#eventDetails > h2').get(0).removeEventListener('input', headerCallback);
+        $('#miniDescription').html(data.miniDescription).prop('contentEditable', false);
+        $('#miniDescription').get(0).removeEventListener('input', miniDescriptionCallback);
+        $('#description').html(data.description).prop('contentEditable', false);
         $('#startDate').datepick('destroy');
+        $('#timeSelect > input').prop('readonly', true);
         $('#endDate').datepick('destroy');
 		$('#attendance').show();
         $('#editButton').show();
@@ -247,9 +254,6 @@ $(document).ready(function() {
 		eventDataByID(currentlyViewing).editing = true;
 		displayEvent(currentlyViewing);
 	});
-	
-	$('#saveButton').hide();
-	$('#editButton').hide();
     
     $('#loginButton').click(function() {
         window.location.replace("/auth/google/");
@@ -267,7 +271,6 @@ $(document).ready(function() {
 		$('#denyText').hide(200);	
 	}).click(denyEvent);
 	$('#denyText').hide();
-	$('#attendance').hide();
     $('#startTime').timepicker({change: function(time) {
         var data = eventDataByID(currentlyViewing);
         if(data.editing) {
