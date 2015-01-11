@@ -107,7 +107,7 @@ function displayEvent(eventID) {
     $('#eventDetails > h2').html(data.name);
     $('#miniDescription').html(data.miniDescription);
     $('#description').html(data.description);
-    $('#eventDetails > #eventImage').html('<img id="eventImageImage" src="images/'+data.imageName+'" />');
+    $('#eventDetails > #eventImage').html('<img id="eventImageImage" src="'+data.imageName+'" />');
 	$('#saveButton').hide();
     $('#editButton').hide();
     $('#startDate').val(data.startTime.toDateString());
@@ -142,6 +142,7 @@ function displayEvent(eventID) {
         $('#startDate').datepick({dateFormat: "D M dd yyyy"});
         $('#endDate').datepick({dateFormat: "D M dd yyyy"});
 		$('#attendance').hide();
+		$('#attendingUsersWrapper').hide();
 		$('#editButton').hide();
     }else{
         $('#eventDetails > h2').html(data.name).prop('contentEditable', false);
@@ -153,6 +154,7 @@ function displayEvent(eventID) {
         $('#timeSelect > input').prop('readonly', true);
         $('#endDate').datepick('destroy');
 		$('#attendance').show();
+		$('#attendingUsersWrapper').show();
         $('#editButton').show();
 	}
 	syncSideBarWithData(eventID);
@@ -161,7 +163,7 @@ function displayEvent(eventID) {
 function syncSideBarWithData(eventID) {
     var newEventData = eventDataByID(eventID);
     var newEvent = eventSidebarElementByID(eventID);
-    newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
+    newEvent.children('.eventImagePreview').css('background-image','url('+newEventData.imageName+')');
     newEvent.children('.statusImage').click(function(){
         deleteEvent($(this).parent().attr("codeID"));
     });
@@ -222,10 +224,10 @@ $(document).ready(function() {
     $('#addEvent').click(function() {
         var newEventData = {};
         newEventData.id = "c"+idCounter++;
-        newEventData.name = getName();
-        newEventData.miniDescription = getContent();
+        newEventData.name = "Enter and event name.";
+        newEventData.miniDescription = "Enter a short description.";
         newEventData.description = "Enter a long description here";
-		newEventData.imageName = "sampleImages/sampleEvent"+Math.floor(Math.random()*18)+".jpg";
+		newEventData.imageName = "images/sampleImages/sampleEvent"+Math.floor(Math.random()*18)+".jpg";
         newEventData.groupID = 0;
         newEventData.editing = true;
         newEventData.startTime = new Date();
@@ -271,6 +273,8 @@ $(document).ready(function() {
 		$('#denyText').hide(200);	
 	}).click(denyEvent);
 	$('#denyText').hide();
+	$('#attendance').hide();
+	$('#attendingUsersWrapper').hide();
     $('#startTime').timepicker({change: function(time) {
         var data = eventDataByID(currentlyViewing);
         if(data.editing) {
