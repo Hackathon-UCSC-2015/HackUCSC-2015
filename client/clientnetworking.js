@@ -1,4 +1,4 @@
-var socket = new WebSocket('ws://192.168.43.237:8080/');
+var socket = new WebSocket('ws://localhost:8080/');
 
 var serverFunctions = { //functions for various commands
     //gets an event of a specified id from eventList and sends it as a jsonified
