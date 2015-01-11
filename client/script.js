@@ -116,6 +116,22 @@ function displayEvent(eventID) {
 	}else{
 		$('#numberAttend').html(data.attending.length+" people attending");
 	}
+    $('#attendingUsers > .user').slice(1).remove();
+    serverFunctions["GOOGLE_ID_LOOKUP"] = function(googleUser) {
+        var newUser = $('#attendingUsers > .user').first().clone().show();
+        var profile = googleUser.profile._json;
+        console.log(profile);
+        newUser.children('a').attr('href', profile.link);
+        newUser.find('img').attr('src', profile.picture);
+        newUser.find('span').html(profile.name);
+        $('#attendingUsers').append(newUser);
+    }
+    console.log
+    for(var i=0; i<data.attending.length; i++) {
+        console.log("Looking up: "+data.attending[i]);
+        socket.send(JSON.stringify({type: "GOOGLE_ID_LOOKUP",
+                                    data: data.attending[i]}));
+    }
     if(data.editing) {
         $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
         $('#eventDetails > h2').get(0).addEventListener('input', headerCallback);
