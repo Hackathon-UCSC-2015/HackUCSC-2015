@@ -21,7 +21,7 @@ var serverFunctions = { //functions for various commands
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded){
         var eventData = eventDataByID(currentlyViewing);
-        eventData.id = decoded.id;
+        eventData = decoded;
         var eventSidebar = eventSidebarElementByID(currentlyViewing);
         eventSidebar.attr('codeID', decoded.id);
         eventData.editing = false;
