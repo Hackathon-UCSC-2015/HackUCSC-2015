@@ -102,6 +102,11 @@ function displayEvent(eventID) {
     $('#editButton').hide();
     $('#startDate').val(data.startTime.toDateString());
     $('#endDate').val(data.endTime.toDateString());
+	if(data.attending.length==1){
+		$('#numberAttend').html("1 person attending");
+	}else{
+		$('#numberAttend').html(data.attending.length+" people attending");
+	}
     if(data.editing) {
         $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
         $('#eventDetails > h2').get(0).addEventListener('input', headerCallback);
@@ -110,8 +115,8 @@ function displayEvent(eventID) {
         $('#description').html(data.description).prop('contentEditable', true);
 		$('#saveButton').show();
         $('.timePicker').prop('readonly', false);
-        $('#startDate').datepick();
-        $('#endDate').datepick();
+        $('#startDate').datepick({dateFormat: "D M dd yyyy"});
+        $('#endDate').datepick({dateFormat: "D M dd yyyy"});
 		$('#attendance').hide();
 		$('#editButton').hide();
     }else{

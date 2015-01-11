@@ -106,11 +106,11 @@ body{
   background-position: center center;
   background-repeat: no-repeat;
 }
-.plusButton:hover, #saveButton:hover {
+.plusButton:hover, #saveButton:hover, #editButton:hover {
 	color:#3333cc;
 	cursor: pointer;
 }
-.plusButton:active, #saveButton:active {
+.plusButton:active, #saveButton:active, #editButton:active {
 	color:#6666ff;
 	cursor:pointer;
 }
@@ -192,7 +192,7 @@ div[contenteditable] {
 	height:300px;
 }
 #attendance {
-	height:100px;
+	height:130px;
 	width: -webkit-calc(100% - 510px); 
 	width: -moz-calc(100% - 510px); 
 	position:fixed;

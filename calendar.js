@@ -14,6 +14,47 @@ function parseTime(time)
 
 }
 
+function withinDate(calendarEvent, current)
+{
+	if(calendarEvent.start < current && current > calendarEvent.end)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function getValidEvents(calendar, events)
+{
+	var calendarLength = calendar.length;
+	var eventsLength = events.length;
+	var validEvents = [];
+
+	for(var i = 0; i < events.length; i++)
+	{
+		var validEvent = {id: events[i].id, valid: true, start: new Date(events[i].startDate), end: new Date(events[i].endDate)};
+		validEvents.push(validEvent);
+	}
+
+	for(var i =0; i < calendarLength; i++)
+	{
+		for(var j = 0; j < eventsLength; j++)
+		{
+			if(validEvents[i].valid)
+			{
+				if(withinDate(calendar[i], validEvents[i].start) || withinDate(calendar[i].end) || (calendar[i].start > validEvents[i].start && calendar[i].end < validEvents[i].end))
+				{
+					validEvents[i].valid = false;
+				}
+			}
+		}
+	}
+
+	return validEvents;
+}
+
 function getGoogleCalendarData(accessToken, userid)
 {
 	var googleCalendar = new gcal.GoogleCalendar(accessToken); //The google calendar for a user's access token
