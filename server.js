@@ -50,8 +50,8 @@ app.get(auth.google.loginCallback,
 		{//successRedirect: '/',					//Back to main page
 		failureRedirect: auth.google.login}),	//Retry login. Perhapse this should do something else
 	function(req, res){
-		console.log('=======================================\n\n');
-		console.log(req.user.id);
+		log(0,'=======================================\n\n');
+		log(0,req.user.id);
 		res.redirect('/?userid='+req.user.id);
 	}
 );
@@ -66,15 +66,15 @@ function setProfile(index, profile){
 //Information from google login request
 var request = function(accessToken, refreshToken, profile, done)
 {
-    console.log("test");
+    log(0,"test");
     process.nextTick(function() 
     {
-	console.log('here');
+	log(0,'here');
         setProfile(profile.id, profile);
-	console.log("User Id: "+profile.id);
-	console.log("Display Name: "+profile.displayName);
-	console.log("Email: "+profile.emails);
-	console.log("Access Token: "+accessToken);
+	log(0,"User Id: "+profile.id);
+	log(0,"Display Name: "+profile.displayName);
+	log(0,"Email: "+profile.emails);
+	log(0,"Access Token: "+accessToken);
         
         cal.getGoogleCalendarData(accessToken, profile.id);
         
@@ -96,16 +96,16 @@ passport.use(
 
 passport.serializeUser(function(user, done) 
 {
-	console.log("\nserialize\n");
-	console.log(user);
-	console.log('\n\n');
+	log(0,"\nserialize\n");
+	log(0,user);
+	log(0,'\n\n');
 	//console.log(done);
 	done(null, user);
 });
 
 passport.deserializeUser(function(obj, done)
 {
-	console.log("\ndeserialize\n");
+	log(0,"\ndeserialize\n");
 	done(null, obj);
 });
 
@@ -239,6 +239,18 @@ function changeAttendance(event, attendance, user){
     //console.log(event);
 }
 
+var logImportance = 0;
+
+function setImportance(val){
+    logImportance = val;
+}
+
+function log(level, data){
+    if (level >= logImportance){
+        console.log(data);
+    }
+}
+
 var serverFunctions = { //functions for various commands
     //gets an event of a specified id from eventList and sends it as a jsonified
     //string to the user who requested it
@@ -249,8 +261,8 @@ var serverFunctions = { //functions for various commands
                 if (group.events[decoded.eventID]){
                     changeAttendance(group.events[decoded.eventID], 
                                      decoded.attendance, user);
-                    console.log("+++++++++++++++++++++++++++++++++++++");
-                    console.log(group);
+                    log(0,"+++++++++++++++++++++++++++++++++++++");
+                    log(0,group);
                     broadcast(group, JSON.stringify(
                         {type: "SAVE_EVENT",
                          data: group.events[decoded.eventID]}));
@@ -270,7 +282,7 @@ var serverFunctions = { //functions for various commands
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded, user){
         if (loggedIn(user)){
-            console.log(user);
+            log(0,user);
             var group = getGroup(decoded.data.groupID);
             if (decoded.data.id[0] == 'c'){ //if it's a client id
                 decoded.data.id = group.events.length; //assign an id
@@ -279,21 +291,21 @@ var serverFunctions = { //functions for various commands
                 decoded.data.notAttending = [];
                 events.push(decoded.data);
                 group.events.push(decoded.data);
-                console.log("Making new event");
+                log(0,"Making new event");
             } else { //else we're overwriting a currently saved event
-                console.log("Overwriting old event");
+                log(0,"Overwriting old event");
                 if (group.events[decoded.data.id]){ //if the event exists
-                    console.log(group.events[decoded.data.id]);
+                    log(0,group.events[decoded.data.id]);
                     if (authenticate(user, group.events[decoded.data.id])){
-                        console.log("They have access to the event");
+                        log(0,"They have access to the event");
                         //replace our old event
                         group.events[decoded.data.id] = decoded.data;
                     } else {
-                        console.log("they have no access");
+                        log(0,"they have no access");
                         return user;
                     }
                 } else {
-                    console.log("event doesn't exist");
+                    log(0,"event doesn't exist");
                     //if the event is nonexistent, drop the packet
                     return user; 
                 }
@@ -303,7 +315,7 @@ var serverFunctions = { //functions for various commands
             broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
                                                    data: decoded.data}), user);
         } else {
-            console.log("user is not logged in");
+            log(0,"user is not logged in");
         }
         return user;
     },
@@ -401,8 +413,8 @@ var serverFunctions = { //functions for various commands
         return user;
     },
     "GOOGLE_ID_LOOKUP": function(decoded, user){
-        console.log(decoded);
-        users.forEach(function(user) { console.log(user) });
+        log(0,decoded);
+        users.forEach(function(user) { log(0,user) });
         getSocket(user).send(
             JSON.stringify({type: "GOOGLE_ID_LOOKUP",
                             data: //googleIDFind(users, decoded.data)}));
@@ -418,7 +430,7 @@ var serverFunctions = { //functions for various commands
             newuser.socketID = user.socketID;
             newuser.id = user.id;
             //googleIDusers[decoded.data] = null;
-            console.log(newuser);
+            log(0, newuser);
             return newuser;
         }
         return user;
@@ -446,14 +458,14 @@ var serverFunctions = { //functions for various commands
 
 //write to use uuids
 wss.on('connection', function(ws){
-    console.log('user connected');
+    log(0,'user connected');
     //var userExists 
     ws.on('message', function(packet){
         var decoded = JSON.parse(packet);
-        console.log('Received '+decoded); //debug
+        log(0,'Received '+decoded); //debug
         //search for and run the command recieved in our server table
         var fn = serverFunctions[decoded.type];
-        console.log('Received '+decoded.type);
+        log(0,'Received '+decoded.type);
         if (fn){
             //run the function if we find it in our table
             var newuser = fn(decoded, ws.userData); 
@@ -464,7 +476,7 @@ wss.on('connection', function(ws){
             //    console.log("user not signed in");
             //}
         } else {
-            console.log('Packet type '+decoded.type+' unknown in '+decoded);
+            log(0,'Packet type '+decoded.type+' unknown in '+decoded);
         }
     });
     ws.on('close', function(code, reason){
@@ -472,7 +484,7 @@ wss.on('connection', function(ws){
         var socketID = wss.clients.indexOf(ws);
         var user = ws.userData;
         var userToRemove = getUserByUUID(users, user.id);
-        console.log("REMOVING USER: "+users.indexOf(userToRemove));
+        log(0,"REMOVING USER: "+users.indexOf(userToRemove));
         users.splice(users.indexOf(userToRemove), 1);
         for(var i=0; i<groups[0].users.length; i++) {
             if(groups[0].users[i].id == user.id) {
@@ -480,7 +492,7 @@ wss.on('connection', function(ws){
                 break;
             }
         }
-        console.log("User "+ws.userData.id+" quit");
+        log(0,"User "+ws.userData.id+" quit");
     });
     //console.log(ws);
     var user = addNewUser(wss.clients.length-1);
