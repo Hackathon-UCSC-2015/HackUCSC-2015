@@ -76,7 +76,7 @@ var request = function(accessToken, refreshToken, profile, done)
 	console.log("Email: "+profile.emails);
 	console.log("Access Token: "+accessToken);
         
-       // cal.getGoogleCalendarData(accessToken);
+        cal.getGoogleCalendarData(accessToken, profile.id);
         
 	    return done(null, profile);
 	});
