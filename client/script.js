@@ -78,6 +78,20 @@ function eventSidebarElementByID(id) {
 }
 
 function displayEvent(eventID) {
+    if(eventID === undefined) {
+        $('#eventDetails > h2').prop('contentEditable', false);
+        $('#eventDetails > h2').get(0).removeEventListener('input', headerCallback);
+        $('#miniDescription').prop('contentEditable', false);
+        $('#miniDescription').get(0).removeEventListener('input', miniDescriptionCallback);
+        $('#description').prop('contentEditable', false);
+        $('#eventDetails > h2').html("");
+        $('#miniDescription').html("");
+        $('#description').html("");
+        $('#saveButton').hide();
+        $('#editButton').hide();
+        $('.timePicker').prop('readonly', true).val("");
+        return;
+    }
     var data = eventDataByID(eventID);
     currentlyViewing = eventID;
     $('#eventDetails > h2').html(data.name);
@@ -85,6 +99,7 @@ function displayEvent(eventID) {
     $('#description').html(data.description);
     $('#eventDetails > #eventImage').html('<img id="eventImageImage" src="images/'+data.imageName+'" />');
 	$('#saveButton').hide();
+    $('#editButton').hide();
     $('#startDate').val(data.startTime.toDateString());
     $('#endDate').val(data.endTime.toDateString());
     if(data.editing) {
@@ -94,13 +109,13 @@ function displayEvent(eventID) {
         $('#miniDescription').get(0).addEventListener('input', miniDescriptionCallback);
         $('#description').html(data.description).prop('contentEditable', true);
 		$('#saveButton').show();
-        $('#editButton').hide();
         $('.timePicker').prop('readonly', false);
         $('#startDate').datepick();
         $('#endDate').datepick();
 		$('#attendance').hide();
     }else{
 		$('#attendance').show();
+        $('#editButton').show();
 	}
 }
 
@@ -111,7 +126,7 @@ function syncSideBarWithData(eventID) {
     newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));});
     newEvent.children('.eventTitle').html(newEventData.name);
     newEvent.children('.eventMiniDescription').html(newEventData.miniDescription);
-	if(newEventData.attending==0){
+	/*if(newEventData.attending==0){
 		newEvent.children('.attendStatusImage').hide();
 	}else{
 		if(newEventData.attending==1){
@@ -120,7 +135,7 @@ function syncSideBarWithData(eventID) {
 			newEvent.children('.attendStatusImage').attr('src','images/denyDown.png');					
 		}
 		newEvent.children('.attendStatusImage').show();
-	}
+	}*/
     if(!newEventData.editing)
         newEvent.children('.statusImage').hide();
 }
