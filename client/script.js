@@ -118,15 +118,13 @@ function displayEvent(eventID) {
 	}
     $('#attendingUsers > .user').slice(1).remove();
     serverFunctions["GOOGLE_ID_LOOKUP"] = function(googleUser) {
-        var newUser = $('#attendingUsers > .user').first().clone().show();
         var profile = googleUser.profile._json;
-        console.log(profile);
+        var newUser = $('#attendingUsers > .user').first().clone().show();
         newUser.children('a').attr('href', profile.link);
         newUser.find('img').attr('src', profile.picture);
         newUser.find('span').html(profile.name);
         $('#attendingUsers').append(newUser);
     }
-    console.log
     for(var i=0; i<data.attending.length; i++) {
         console.log("Looking up: "+data.attending[i]);
         socket.send(JSON.stringify({type: "GOOGLE_ID_LOOKUP",
@@ -200,6 +198,7 @@ function denyEvent(){
 }
 
 function confirmEvent(){
+    console.log("confirmEvent");
     attend(currentlyViewing, 1, 0);
 }
 

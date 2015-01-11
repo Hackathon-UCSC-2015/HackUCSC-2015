@@ -467,6 +467,15 @@ wss.on('connection', function(ws){
     });
     ws.on('close', function(code, reason){
         ws.connectionClosed = true;
+        var socketID = wss.clients.indexOf(ws);
+        var user = ws.userData
+        users.splice(users.indexOf(user), 1);
+        for(var i=0; i<groups[0].users.length; i++) {
+            if(groups[0].users[i].id == user.id) {
+                groups[0].users.splice(i, 1);
+                break;
+            }
+        }
         console.log("User "+ws.userData.id+" quit");
     });
     //console.log(ws);
