@@ -60,28 +60,32 @@ var miniDescriptionCallback = function() {
     }
 }
 
-function stopEditing() {
-    eventSidebarElementByID(currentlyViewing).children('.statusImage').hide();
+function eventSidebarElementByID(id) {
+    return $('#eventList').children('div[codeID="'+id+'"]');
+}
+
+function removeEditables() {
     $('#eventDetails > h2').prop('contentEditable', false);
     $('#eventDetails > h2').get(0).removeEventListener('input', headerCallback);
     $('#miniDescription').prop('contentEditable', false);
     $('#miniDescription').get(0).removeEventListener('input', miniDescriptionCallback);
     $('#description').prop('contentEditable', false);
     $('.timePicker').prop('readonly', true);
-    eventDataByID(currentlyViewing).editing = false;
-	$('#saveButton').hide(100);
-    $('.timePicker').prop('readonly', true);
-    $('#startDate').datepick('destroy');
-    $('#endDate').datepick('destroy');
-	$('#attendance').show();
-}
-
-function eventSidebarElementByID(id) {
-    return $('#eventList').children('div[codeID="'+id+'"]');
 }
 
 function displayEvent(eventID) {
+    if(eventID === undefined) {
+        removeEditables();
+        $('#eventDetails > h2').html("");
+        $('#miniDescription').html("");
+        $('#description').html("");
+        $('#saveButton').hide();
+        $('#editButton').hide();
+        $('.timePicker').prop('readonly', true).val("");
+        return;
+    }
     var data = eventDataByID(eventID);
+    console.log(eventID);
     $('#eventDetails > h2').html(data.name);
     $('#miniDescription').html(data.miniDescription);
     $('#description').html(data.description);
@@ -89,6 +93,8 @@ function displayEvent(eventID) {
 	$('#saveButton').hide();
     $('#startDate').val(data.startTime.toDateString());
     $('#endDate').val(data.endTime.toDateString());
+    $('#saveButton').hide();
+    $('#editButton').hide();
     if(data.editing) {
         $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
         $('#eventDetails > h2').get(0).addEventListener('input', headerCallback);
@@ -101,7 +107,15 @@ function displayEvent(eventID) {
         $('#endDate').datepick();
 		$('#attendance').hide();
     }else{
-		$('#attendance').show();
+		eventSidebarElementByID(currentlyViewing).children('.statusImage').hide();
+        removeEditables();
+        eventDataByID(currentlyViewing).editing = false;
+	    $('#saveButton').hide(100);
+        $('#editButton').show();
+        $('.timePicker').prop('readonly', true);
+        $('#startDate').datepick('destroy');
+        $('#endDate').datepick('destroy');
+        $('#attendance').show();
 	}
 }
 
@@ -116,7 +130,7 @@ function clearContentFrame(){
 function deletePendingEvent(eventID) {
 	deleteEvent(eventID);
 	clearContentFrame();
-	stopEditing();
+	displayEvent(undefined);
 }
 
 function syncSideBarWithData(eventID) {
@@ -195,6 +209,7 @@ $(document).ready(function() {
     });
     
     $('#saveButton').click(function() {
+        console.log("save");
         var startDate = getDate('#startDate');
         var endDate = getDate('#endDate');
         var data = eventDataByID(currentlyViewing);

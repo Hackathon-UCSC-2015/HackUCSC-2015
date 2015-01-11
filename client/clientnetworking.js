@@ -21,11 +21,12 @@ var serverFunctions = { //functions for various commands
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded){
         var eventData = eventDataByID(currentlyViewing);
-        eventData.id = decoded.id;
+        eventData = decoded;
         var eventSidebar = eventSidebarElementByID(currentlyViewing);
         eventSidebar.attr('codeID', decoded.id);
         currentlyViewing = eventData.id;
-        stopEditing();
+        displayEvent(currentlyViewing);
+        syncSideBarWithData(currentlyViewing);
     },
     "GOOGLE_ID_LOGIN": function(decoded) {
         console.log(decoded);
@@ -87,7 +88,8 @@ socket.onmessage = function(event) {
 function save(id) {
     var packet = {};
     packet.type = "SAVE_EVENT";
-    stopEditing();
-    packet.data = eventDataByID(id)
+    packet.data = eventDataByID(id);
+    packet.data.editing = false;
+    displayEvent(packet.data.id);
     socket.send(JSON.stringify(packet));
 }
