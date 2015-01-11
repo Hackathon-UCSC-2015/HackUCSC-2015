@@ -112,7 +112,7 @@ passport.deserializeUser(function(obj, done)
 User = function(wsID){
     this.socketID = wsID;
     this.name = "";
-    this.groups = [];
+    //this.groups = [];
     this.connectionClosed = false;
     this.id = uuid.v4();
 }
@@ -136,6 +136,8 @@ function loggedIn(user){
 function authenticate(user, event){
     return loggedIn(user) && event.eventOwner == user.profile.id;
 }
+
+
 
 var events = [];
 var schedules = [];
@@ -175,6 +177,12 @@ function getUser(userList, fn){
         }
     }
     return null;
+}
+
+function googleIDFind(userList, googleID){
+    return getuser(userList, function(user){
+        return user.profile.id == googleID;
+    });
 }
 
 function getUserByUUID(userList, UUID){
@@ -377,7 +385,8 @@ var serverFunctions = { //functions for various commands
     "GOOGLE_ID_LOOKUP": function(decoded, user){
         getSocket(user).send(
             JSON.stringify({type: "GOOGLE_ID_LOOKUP",
-                            data: getUserByGoogleID(decoded.data)}));
+                            data: googleIDFind(users, decoded.data)}));
+        //getUserByGoogleID(decoded.data)}));
         return user;
     },
     "GOOGLE_ID_LOGIN": function(decoded, user){
