@@ -21,7 +21,12 @@ var serverFunctions = { //functions for various commands
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded){
         var eventData = eventDataByID(currentlyViewing);
+        events.splice(eventDataIndexByID(currentlyViewing), 1);
         eventData = decoded;
+        //JSON.stringify turns them into strings but not back into dates
+        eventData.startTime = new Date(eventData.startTime);
+        eventData.endTime = new Date(eventData.endTime);
+        events.push(eventData);
         var eventSidebar = eventSidebarElementByID(currentlyViewing);
         eventSidebar.attr('codeID', decoded.id);
         eventData.editing = false;
