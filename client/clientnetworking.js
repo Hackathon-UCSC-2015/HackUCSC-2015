@@ -14,8 +14,8 @@ var serverFunctions = { //functions for various commands
             newEventSidebarFromData(decoded);
         } else {
             data = decoded;
-            syncSideBarWithData(data.id);
         }
+        syncSideBarWithData(data.id);
     },
     //gets an event from a client and assigns it an id, saves it in eventList
     //and sends the whole event back to the client
