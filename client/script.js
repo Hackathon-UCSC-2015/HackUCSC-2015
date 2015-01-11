@@ -128,7 +128,7 @@ function displayEvent(eventID) {
         newUser.children('a').attr('href', profile.link);
         newUser.find('img').attr('src', profile.picture);
         if(profile.name === undefined || profile.name == "") {
-            newUser.find('span').html("Unknown User");
+            newUser.find('span').html("Unamed User");
         } else {
             newUser.find('span').html(profile.name);
         }
