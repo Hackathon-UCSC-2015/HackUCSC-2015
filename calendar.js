@@ -4,6 +4,7 @@ getGoogleCalendarData: getGoogleCalendarData
 
 };
 var gcal = require('google-calendar');
+var ser = require('./server');
 
 function parseTime(time)
 {
@@ -13,9 +14,13 @@ function parseTime(time)
 
 }
 
-function getGoogleCalendarData(accessToken)
+function getGoogleCalendarData(accessToken, userid)
 {
 	var googleCalendar = new gcal.GoogleCalendar(accessToken); //The google calendar for a user's access token
+	var user = ser.getUserByGoogleID(userid);
+	console.log('\n\n\nthis is the user login ======================================================')
+	console.log(user);
+	console.log('end user login \n\n')
 	//var customEvents =[];
 
 	googleCalendar.calendarList.list(
@@ -29,48 +34,58 @@ function getGoogleCalendarData(accessToken)
 
 					googleCalendar.events.list(calid,
 						function(err, eventList)
-						{					
-							calLength = eventList.items.length;
+						{
+							if(!err)
+							{				
+								calLength = eventList.items.length;
+								var formattedData=[];
 
-							for(var j = 0; j < calLength; j++)
-							{
-								currentEvent = eventList.items[j];
-								var calEvent;
-
-								if(currentEvent.start)
+								for(var j = 0; j < calLength; j++)
 								{
-									if(currentEvent.start.dateTime != undefined)
-									{
-										calEvent ={name: currentEvent.summary, 
-													location: currentEvent.location,
-													description: currentEvent.description,
+									currentEvent = eventList.items[j];
+									var calEvent;
 
-													//timeZone: currentEvent.start.timeZone,
-													start: parseTime(currentEvent.start.dateTime),
-													end: parseTime(currentEvent.end.dateTime)
-										};
-										parseTime(currentEvent.start.dateTime);
-										console.log(calEvent);
-									}	
+									if(currentEvent.start)
+									{
+										if(currentEvent.start.dateTime != undefined)
+										{
+											calEvent ={name: currentEvent.summary, 
+														location: currentEvent.location,
+														description: currentEvent.description,
+
+														//timeZone: currentEvent.start.timeZone,
+														start: parseTime(currentEvent.start.dateTime),
+														end: parseTime(currentEvent.end.dateTime)
+											};
+											formattedData.push(calEvent);
+										}	
+									}
+									
+									
 								}
-								
-								
-								
-								
+								//console.log(formattedData);
+								//user.gcdata = formattedData();
+								//var user 
 							}
-							
+							else
+							{
+								console.log('Error retrieving Google Calendar data: '+err);
+
+								//Add something to alert user/server
+							}
 							
 						});
 				}
 			}
+			else
+			{
+				console.log('Error retrieving Google Calendar data: '+err);
+
+				//Add something to alert user/server
+			}
 
 
 		});
-
-	//console.log(customEvents);
-	//return customEvents;
-
-	//return {name: 'test', startTime: 8, endTime: 11};
 }
 
 function getICalData()
