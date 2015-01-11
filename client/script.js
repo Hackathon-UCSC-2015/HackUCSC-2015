@@ -57,7 +57,7 @@ var miniDescriptionCallback = function() {
     }
 }
 
-function stopEditing() {
+/*function stopEditing() {
     eventSidebarElementByID(currentlyViewing).children('.statusImage').hide();
     $('#eventDetails > h2').prop('contentEditable', false);
     $('#eventDetails > h2').get(0).removeEventListener('input', headerCallback);
@@ -68,16 +68,30 @@ function stopEditing() {
     eventDataByID(currentlyViewing).editing = false;
 	$('#saveButton').hide(100);
     $('.timePicker').prop('readonly', true);
-    $('#startDate').datepick('destroy');
-    $('#endDate').datepick('destroy');
-	$('#attendance').show();
-}
+    //$('#startDate').datepick('destroy');
+    //$('#endDate').datepick('destroy');
+	//displayEvent(currentlyViewing);
+}*/
 
 function eventSidebarElementByID(id) {
     return $('#eventList').children('div[codeID="'+id+'"]');
 }
 
 function displayEvent(eventID) {
+    if(eventID === undefined) {
+        $('#eventDetails > h2').prop('contentEditable', false);
+        $('#eventDetails > h2').get(0).removeEventListener('input', headerCallback);
+        $('#miniDescription').prop('contentEditable', false);
+        $('#miniDescription').get(0).removeEventListener('input', miniDescriptionCallback);
+        $('#description').prop('contentEditable', false);
+        $('#eventDetails > h2').html("");
+        $('#miniDescription').html("");
+        $('#description').html("");
+        $('#saveButton').hide();
+        $('#editButton').hide();
+        $('.timePicker').prop('readonly', true).val("");
+        return;
+    }
     var data = eventDataByID(eventID);
     currentlyViewing = eventID;
     $('#eventDetails > h2').html(data.name);
@@ -85,6 +99,7 @@ function displayEvent(eventID) {
     $('#description').html(data.description);
     $('#eventDetails > #eventImage').html('<img id="eventImageImage" src="images/'+data.imageName+'" />');
 	$('#saveButton').hide();
+    $('#editButton').hide();
     $('#startDate').val(data.startTime.toDateString());
     $('#endDate').val(data.endTime.toDateString());
     if(data.editing) {
@@ -98,9 +113,14 @@ function displayEvent(eventID) {
         $('#startDate').datepick();
         $('#endDate').datepick();
 		$('#attendance').hide();
+		$('#editButton').hide();
     }else{
+        $('#startDate').datepick('destroy');
+        $('#endDate').datepick('destroy');
 		$('#attendance').show();
+        $('#editButton').show();
 	}
+	syncSideBarWithData(eventID);
 }
 
 function syncSideBarWithData(eventID) {
@@ -110,15 +130,18 @@ function syncSideBarWithData(eventID) {
     newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));});
     newEvent.children('.eventTitle').html(newEventData.name);
     newEvent.children('.eventMiniDescription').html(newEventData.miniDescription);
-	if(newEventData.attending==0){
-		newEvent.children('.attendStatusImage').hide();
-	}else{
-		if(newEventData.attending==1){
+	if(me){
+		if(newEventData.notAttending.indexOf(me.id)>-1){
+			newEvent.children('.attendStatusImage').attr('src','images/denyDown.png');	
+			newEvent.children('.attendStatusImage').show();
+		}else if(newEventData.attending.indexOf(me.id)>-1){
 			newEvent.children('.attendStatusImage').attr('src','images/confirmDown.png');	
-		}else if(newEventData.attending==2){
-			newEvent.children('.attendStatusImage').attr('src','images/denyDown.png');					
+			newEvent.children('.attendStatusImage').show();				
+		}else{
+			newEvent.children('.attendStatusImage').hide();
 		}
-		newEvent.children('.attendStatusImage').show();
+	}else{
+		newEvent.children('.attendStatusImage').hide();
 	}
     if(!newEventData.editing)
         newEvent.children('.statusImage').hide();
@@ -140,15 +163,10 @@ function newEventSidebarFromData(newEventData) {
 }
 
 function denyEvent(){
-	eventDataByID(currentlyViewing).attending = 2;
-    syncSideBarWithData(currentlyViewing);
 	attend(currentlyViewing, 2, 0);
 }
 
 function confirmEvent(){
-	eventDataByID(currentlyViewing).attending = 1;
-    syncSideBarWithData(currentlyViewing);
-	save(currentlyViewing);
     attend(currentlyViewing, 1, 0);
 }
 
@@ -173,7 +191,8 @@ $(document).ready(function() {
         newEventData.editing = true;
         newEventData.startTime = new Date();
         newEventData.endTime = new Date();
-		newEventData.attending = 0;
+		newEventData.attending = new Array();
+		newEventData.notAttending = new Array();
         events.push(newEventData);
 		
         newEventSidebarFromData(newEventData);
@@ -194,6 +213,7 @@ $(document).ready(function() {
     });
 	
 	$('#saveButton').hide();
+	$('#editButton').hide();
     
     $('#loginButton').click(function() {
         window.location.replace("/auth/google/");

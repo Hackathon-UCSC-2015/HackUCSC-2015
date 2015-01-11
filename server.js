@@ -191,11 +191,45 @@ function getGroup(ID){
     return groups[parseInt(ID)];
 }
 
+function changeAttendance(event, attendance, user){
+    var attendingp = 
+        event.attending.indexOf(user.profile.id) != -1;
+    var notAttendingp = 
+        event.notAttending.indexOf(user.profile.id) != -1;
+
+    if (attendance == 1){ //yes
+        if (!attendingp){
+            event.attending.push(user.profile.id);
+        }
+        if (notAttendingp){
+            event.notAttending.splice(event.notAttending.indexOf(user.profile.id), 1);
+        }
+    } else if (attendance == 2) { //no
+        if (!notAttendingp){
+            event.notAttending.push(user.profile.id);
+        }
+        if (attendingp){
+            event.attending.splice(event.attending.indexOf(user.profile.id), 1);
+        }
+    }
+    //console.log(event);
+}
+
 var serverFunctions = { //functions for various commands
     //gets an event of a specified id from eventList and sends it as a jsonified
     //string to the user who requested it
     "ATTENDANCE": function(decoded, user){
-        
+        var group = getGroup(decoded.groupID);
+        if (group){
+            if (group.events[decoded.eventID]){
+                changeAttendance(group.events[decoded.eventID], 
+                                 decoded.attendance, user);
+                broadcast(group, JSON.stringify(
+                    {type: "SAVE_EVENT",
+                     data: group.events[decoded.eventID]}));
+            }
+        }
+        return user;
     },
     "LOAD_EVENT": function(decoded, user){
         getSocket(user).send(
@@ -213,7 +247,8 @@ var serverFunctions = { //functions for various commands
             if (decoded.data.id[0] == 'c'){ //if it's a client id
                 decoded.data.id = group.events.length; //assign an id
                 decoded.data.eventOwner = user.profile.id;
-                //decoded.
+                decoded.data.attending = [];
+                decoded.data.notAttending = [];
                 events.push(decoded.data);
                 group.events.push(decoded.data);
                 console.log("Making new event");

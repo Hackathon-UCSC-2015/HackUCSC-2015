@@ -14,7 +14,7 @@ var serverFunctions = { //functions for various commands
             newEventSidebarFromData(decoded);
         } else {
             data = decoded;
-            syncSideBarWithData(data.id);
+        	syncSideBarWithData(data.id);
         }
     },
     //gets an event from a client and assigns it an id, saves it in eventList
@@ -64,10 +64,6 @@ var serverFunctions = { //functions for various commands
 };
 
 socket.onopen = function() {
-    var packet = {};
-    packet.type = "LIST_EVENTS";
-    socket.send(JSON.stringify(packet));
-    console.log("Sent LIST_EVENTS");
     
     var googleid = getUrlParameter("userid");
     if(googleid != undefined) {
@@ -76,6 +72,12 @@ socket.onopen = function() {
         packet.data = googleid;
         socket.send(JSON.stringify(packet));
     }
+	
+    var packet = {};
+    packet.type = "LIST_EVENTS";
+    socket.send(JSON.stringify(packet));
+    console.log("Sent LIST_EVENTS");
+	
 }
 
 socket.onmessage = function(event) {
