@@ -210,7 +210,7 @@ function changeAttendance(event, attendance, user){
             event.notAttending.push(user.profile.id);
         }
         if (attendingp){
-            event.attending.splice(event.notAttending.indexOf(user.profile.id), 1);
+            event.attending.splice(event.attending.indexOf(user.profile.id), 1);
         }
     }
 }
@@ -224,6 +224,9 @@ var serverFunctions = { //functions for various commands
             if (group.events[decoded.eventID]){
                 changeAttendance(group.events[decoded.eventID], 
                                  decoded.attendance, user);
+                broadcast(group, JSON.stringify(
+                    {type: "SAVE_EVENT",
+                     data: group.events[decoded.eventID]}));
             }
         }
         return user;
