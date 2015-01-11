@@ -83,7 +83,7 @@ socket.onopen = function() {
     socket.send(JSON.stringify(packet));
     console.log("Sent LIST_EVENTS");
 	
-}
+}//small change
 
 socket.onmessage = function(event) {
     var data = JSON.parse(event.data);

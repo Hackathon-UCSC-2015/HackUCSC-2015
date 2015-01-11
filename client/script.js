@@ -10,7 +10,8 @@ function getUrlParameter(sParam)
             return sParameterName[1];
         }
     }
-} 
+}
+//small change
 
 var events = [];
 var currentlyViewing = "";
