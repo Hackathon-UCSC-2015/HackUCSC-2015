@@ -5,6 +5,20 @@ getGoogleCalendarData: getGoogleCalendarData
 };
 var gcal = require('google-calendar');
 
+function parseTime(time)
+{
+	var res = time.split(/[.T\/ -\/ :]/);
+	//res = res.split('T');
+	//res = res.split(':');
+
+	var d = Date(res[0], res[1], res[2], res[3], res[4], res[5], 0);
+	//d.setUTC(res[6]);
+
+console.log(d);
+console.log(res);
+
+}
+
 function getGoogleCalendarData(accessToken)
 {
 	var googleCalendar = new gcal.GoogleCalendar(accessToken); //The google calendar for a user's access token
@@ -29,32 +43,26 @@ function getGoogleCalendarData(accessToken)
 								currentEvent = eventList.items[j];
 								var calEvent;
 
-								if(currentEvent.start == null)
+								if(currentEvent.start)
 								{
-									calEvent ={name: currentEvent.summary, 
-												location: currentEvent.location,
-												description: currentEvent.description,
+									if(currentEvent.start.dateTime != undefined)
+									{
+										calEvent ={name: currentEvent.summary, 
+													location: currentEvent.location,
+													description: currentEvent.description,
 
-												timeZone: undefined,
-												start: undefined,
-												end: undefined
-									};
-								}
-								else
-								{
-									calEvent ={name: currentEvent.summary, 
-												location: currentEvent.location,
-												description: currentEvent.description,
-
-												timeZone: currentEvent.start.timeZone,
-												start: currentEvent.start.dateTime,
-												end: currentEvent.end.dateTime
-								};
+													//timeZone: currentEvent.start.timeZone,
+													start: currentEvent.start.dateTime,
+													end: currentEvent.end.dateTime
+										};
+										parseTime(currentEvent.start.dateTime);
+										console.log(calEvent);
+									}	
 								}
 								
 								
 								
-								console.log(calEvent);
+								
 							}
 							
 							
