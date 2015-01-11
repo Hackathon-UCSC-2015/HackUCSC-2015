@@ -191,11 +191,34 @@ function getGroup(ID){
     return groups[parseInt(ID)];
 }
 
+function changeAttendance(event, attendance, user){
+    //remove user from not attending list
+    event.notAttending = event.notAttending.filter(function(id){ 
+        return id == user.profile.id;
+    });
+    //remove from attending list
+    event.attending = event.attending.filter(function(us){ 
+        return id == user.profile.id;
+    });
+    if (attendance == 1){ //yes
+        event.attending.push(user.profile.id);
+    } else if (attendance == 2) { //no
+        event.notAttending.push(user.profile.id);
+    }
+}
+
 var serverFunctions = { //functions for various commands
     //gets an event of a specified id from eventList and sends it as a jsonified
     //string to the user who requested it
     "ATTENDANCE": function(decoded, user){
-        
+        var group = getGroup(decoded.data.groupID);
+        if (group){
+            if (group.events[decoded.data.eventID]){
+                changeAttendance(group.events[decoded.data.id], 
+                                 decoded.data.attendance, user);
+            }
+        }
+        return user;
     },
     "LOAD_EVENT": function(decoded, user){
         getSocket(user).send(
@@ -213,7 +236,8 @@ var serverFunctions = { //functions for various commands
             if (decoded.data.id[0] == 'c'){ //if it's a client id
                 decoded.data.id = group.events.length; //assign an id
                 decoded.data.eventOwner = user.profile.id;
-                //decoded.
+                decoded.data.attending = [];
+                decoded.data.notAttending = [];
                 events.push(decoded.data);
                 group.events.push(decoded.data);
                 console.log("Making new event");
