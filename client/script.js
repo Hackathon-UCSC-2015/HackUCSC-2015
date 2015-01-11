@@ -106,14 +106,6 @@ function displayEvent(eventID) {
 	}
 }
 
-function clearContentFrame(){
-    $('#eventDetails > h2').html('');
-    $('#miniDescription').html('');
-    $('#description').html('');
-    $('#eventDetails > #eventImage').html('');
-	$('#saveButton').hide();
-}
-
 function syncSideBarWithData(eventID) {
     var newEventData = eventDataByID(eventID);
     var newEvent = eventSidebarElementByID(eventID);
