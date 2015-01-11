@@ -37,6 +37,11 @@ var serverFunctions = { //functions for various commands
         me = decoded.profile;
         login();
     },
+    "GOOGLE_ID_LOOKUP": function(decoded) {
+        console.log(decoded);
+        me = decoded.profile;
+        login();
+    },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded){
     },
