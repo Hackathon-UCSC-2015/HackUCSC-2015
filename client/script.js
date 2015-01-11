@@ -244,6 +244,10 @@ $(document).ready(function() {
         data.description = $('#description').html();
         save(currentlyViewing);
     });
+	$('#editButton').click(function(){	
+		eventDataByID(currentlyViewing).editing = true;
+		displayEvent(currentlyViewing);
+	});
 	
 	$('#saveButton').hide();
 	$('#editButton').hide();
