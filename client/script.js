@@ -119,6 +119,7 @@ function displayEvent(eventID) {
 		$('#attendance').show();
         $('#editButton').show();
 	}
+	syncSideBarWithData(eventID);
 }
 
 function syncSideBarWithData(eventID) {
