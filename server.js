@@ -203,14 +203,14 @@ function changeAttendance(event, attendance, user){
             event.attending.push(user.profile.id);
         }
         if (notAttendingp){
-            event.notAttending.splice(event.notAttending.indexof(user.profile.id), 1);
+            event.notAttending.splice(event.notAttending.indexOf(user.profile.id), 1);
         }
     } else if (attendance == 2) { //no
         if (!notAttendingp){
             event.notAttending.push(user.profile.id);
         }
         if (attendingp){
-            event.attending.splice(event.notAttending.indexof(user.profile.id), 1);
+            event.attending.splice(event.notAttending.indexOf(user.profile.id), 1);
         }
     }
 }
