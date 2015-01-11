@@ -73,7 +73,7 @@ function getGoogleCalendarData(accessToken, userid)
 									//user.gcdata = formattedData;
 									if(user.gcdata == null)
 									{
-										user.gcdata.push( formattedData);
+										user.gcdata = formattedData;
 									}
 									else
 									{
