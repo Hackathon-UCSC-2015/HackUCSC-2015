@@ -384,7 +384,7 @@ var serverFunctions = { //functions for various commands
     },
     "GOOGLE_ID_LOOKUP": function(decoded, user){
         console.log(decoded);
-        console.log(users);
+        users.forEach(function(user) { console.log(user) });
         getSocket(user).send(
             JSON.stringify({type: "GOOGLE_ID_LOOKUP",
                             data: googleIDFind(users, decoded.data)}));
