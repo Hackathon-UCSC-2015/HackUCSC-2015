@@ -192,18 +192,26 @@ function getGroup(ID){
 }
 
 function changeAttendance(event, attendance, user){
-    //remove user from not attending list
-    event.notAttending = event.notAttending.filter(function(id){ 
-        return id == user.profile.id;
-    });
-    //remove from attending list
-    event.attending = event.attending.filter(function(us){ 
-        return id == user.profile.id;
-    });
+    console.log(event);
+    var attendingp = 
+        event.attending.indexOf(user.profile.id) != -1;
+    var notAttendingp = 
+        event.notAttending.indexOf(user.profile.id) != -1;
+
     if (attendance == 1){ //yes
-        event.attending.push(user.profile.id);
+        if (!attendingp){
+            event.attending.push(user.profile.id);
+        }
+        if (notAttendingp){
+            event.notAttending.splice(event.notAttending.indexof(user.profile.id), 1);
+        }
     } else if (attendance == 2) { //no
-        event.notAttending.push(user.profile.id);
+        if (!notAttendingp){
+            event.notAttending.push(user.profile.id);
+        }
+        if (attendingp){
+            event.attending.splice(event.notAttending.indexof(user.profile.id), 1);
+        }
     }
 }
 
@@ -211,11 +219,11 @@ var serverFunctions = { //functions for various commands
     //gets an event of a specified id from eventList and sends it as a jsonified
     //string to the user who requested it
     "ATTENDANCE": function(decoded, user){
-        var group = getGroup(decoded.data.groupID);
+        var group = getGroup(decoded.groupID);
         if (group){
-            if (group.events[decoded.data.eventID]){
-                changeAttendance(group.events[decoded.data.id], 
-                                 decoded.data.attendance, user);
+            if (group.events[decoded.eventID]){
+                changeAttendance(group.events[decoded.eventID], 
+                                 decoded.attendance, user);
             }
         }
         return user;
