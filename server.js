@@ -171,8 +171,18 @@ function broadcastAllBut(group, data, user){
 }
 
 function getUser(userList, fn){
-    for (var i = 0; i < userList; i++){
+    for (var i = 0; i < userList.length; i++){
         if (fn(userList[i])){
+            return userList[i];
+        }
+    }
+    return null;
+}
+
+function setUser(userlist, fn, val){
+    for (var i = 0; i < userList.length; i++){
+        if (fn(userList[i])){
+            userList[i] = val;
             return userList[i];
         }
     }
@@ -183,6 +193,12 @@ function googleIDFind(userList, googleID){
     return getUser(userList, function(user){
         return user.profile.id == googleID;
     });
+}
+
+function googleIDreplace(userList, googleID, val){
+    return setUser(userList, function(user){
+        return user.profile.id == googleID;
+    }, val);
 }
 
 function getUserByUUID(userList, UUID){
@@ -387,8 +403,8 @@ var serverFunctions = { //functions for various commands
         users.forEach(function(user) { console.log(user) });
         getSocket(user).send(
             JSON.stringify({type: "GOOGLE_ID_LOOKUP",
-                            data: googleIDFind(users, decoded.data)}));
-        //getUserByGoogleID(decoded.data)}));
+                            data: //googleIDFind(users, decoded.data)}));
+        getUserByGoogleID(decoded.data)}));
         return user;
     },
     "GOOGLE_ID_LOGIN": function(decoded, user){
@@ -399,7 +415,7 @@ var serverFunctions = { //functions for various commands
                                 data: newuser}));
             newuser.socketID = user.socketID;
             newuser.id = user.id;
-            googleIDusers[decoded.data] = null;
+            //googleIDusers[decoded.data] = null;
             console.log(newuser);
             return newuser;
         }
@@ -427,7 +443,14 @@ wss.on('connection', function(ws){
         var fn = serverFunctions[decoded.type];
         console.log('Received '+decoded.type);
         if (fn){
-            ws.userData = fn(decoded, ws.userData); //run the function if we find it in our table
+            //run the function if we find it in our table
+            var newuser = fn(decoded, ws.userData); 
+            ws.userData = newuser;
+            //if (loggedIn(newuser)){
+            //    googleIDreplace(users, newuser.profile.id, newuser);
+            //} else {
+            //    console.log("user not signed in");
+            //}
         } else {
             console.log('Packet type '+decoded.type+' unknown in '+decoded);
         }
