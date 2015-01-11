@@ -35,6 +35,9 @@ function eventDataByID(id) {
 }
 
 function deleteEvent(eventID) {
+    if(eventDataIndexByID(eventID) === undefined) {
+        return;
+    }
     events.splice(eventDataIndexByID(eventID), 1);
     eventSidebarElementByID(eventID).remove();
     displayEvent(undefined);
@@ -138,7 +141,9 @@ function syncSideBarWithData(eventID) {
     var newEventData = eventDataByID(eventID);
     var newEvent = eventSidebarElementByID(eventID);
     newEvent.children('.eventImagePreview').css('background-image','url(images/'+newEventData.imageName+')');
-    newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));});
+    newEvent.children('.statusImage').click(function(){
+        deleteEvent($(this).parent().attr("codeID"));
+    });
     newEvent.children('.eventTitle').html(newEventData.name);
     newEvent.children('.eventMiniDescription').html(newEventData.miniDescription);
 	if(me){
