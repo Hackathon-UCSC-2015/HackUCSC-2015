@@ -71,6 +71,7 @@ function stopEditing() {
     $('#startDate').datepick('destroy');
     $('#endDate').datepick('destroy');
 	$('#attendance').show();
+	$('#editButton').show();
 }
 
 function eventSidebarElementByID(id) {
@@ -94,11 +95,14 @@ function displayEvent(eventID) {
         $('#miniDescription').get(0).addEventListener('input', miniDescriptionCallback);
         $('#description').html(data.description).prop('contentEditable', true);
 		$('#saveButton').show();
+        $('#editButton').hide();
         $('.timePicker').prop('readonly', false);
         $('#startDate').datepick();
         $('#endDate').datepick();
 		$('#attendance').hide();
+		$('#editButton').hide();
     }else{
+		$('#editButton').show();
 		$('#attendance').show();
 	}
 }
@@ -110,15 +114,18 @@ function syncSideBarWithData(eventID) {
     newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));});
     newEvent.children('.eventTitle').html(newEventData.name);
     newEvent.children('.eventMiniDescription').html(newEventData.miniDescription);
-	if(newEventData.attending==0){
-		newEvent.children('.attendStatusImage').hide();
-	}else{
-		if(newEventData.attending==1){
+	if(me){
+		if(newEventData.notAttending.indexOf(me.id)>-1){
+			newEvent.children('.attendStatusImage').attr('src','images/denyDown.png');	
+			newEvent.children('.attendStatusImage').show();
+		}else if(newEventData.attending.indexOf(me.id)>-1){
 			newEvent.children('.attendStatusImage').attr('src','images/confirmDown.png');	
-		}else if(newEventData.attending==2){
-			newEvent.children('.attendStatusImage').attr('src','images/denyDown.png');					
+			newEvent.children('.attendStatusImage').show();				
+		}else{
+			newEvent.children('.attendStatusImage').hide();
 		}
-		newEvent.children('.attendStatusImage').show();
+	}else{
+		newEvent.children('.attendStatusImage').hide();
 	}
     if(!newEventData.editing)
         newEvent.children('.statusImage').hide();
@@ -140,13 +147,23 @@ function newEventSidebarFromData(newEventData) {
 }
 
 function denyEvent(){
-	eventDataByID(currentlyViewing).attending = 2;
+	eventDataByID(currentlyViewing).notAttending.push(me.id);
     syncSideBarWithData(currentlyViewing);
 	attend(currentlyViewing, 2, 0);
 }
 
 function confirmEvent(){
-	eventDataByID(currentlyViewing).attending = 1;
+	var eventData = eventDataByID(currentlyViewing);
+	var notAttendingIndex = eventData.notAttending.indexOf(me.id); 
+	var attendingIndex = eventData.attending.indexOf(me.id); 
+	if(notAttendingIndex>-1){
+		console.log("Removing from notAttending array");
+		eventData.notAttending.splice(notAttendingIndex,1)
+	}
+	if(attendingIndex==-1){
+		console.log("Adding to attending array");
+		eventDataByID(currentlyViewing).attending.push(me.id);
+	}
     syncSideBarWithData(currentlyViewing);
 	save(currentlyViewing);
     attend(currentlyViewing, 1, 0);
@@ -173,7 +190,8 @@ $(document).ready(function() {
         newEventData.editing = true;
         newEventData.startTime = new Date();
         newEventData.endTime = new Date();
-		newEventData.attending = 0;
+		newEventData.attending = new Array();
+		newEventData.notAttending = new Array();
         events.push(newEventData);
 		
         newEventSidebarFromData(newEventData);
@@ -194,6 +212,7 @@ $(document).ready(function() {
     });
 	
 	$('#saveButton').hide();
+	$('#editButton').hide();
     
     $('#loginButton').click(function() {
         window.location.replace("/auth/google/");
