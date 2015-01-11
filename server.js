@@ -427,9 +427,19 @@ var serverFunctions = { //functions for various commands
         newuser.id = user.id;
         return newuser;
     },
-    "UUID_LOOKUP_SET": function(decided, user){
+    "UUID_LOOKUP_SET": function(decoded, user){
         return user;
     },
+    "LIST_EVENTS_I_CAN_ATTEND": function(decoded, user){
+        var group = getGroup(decoded.data.groupID);
+        if (group){
+            var filteredEvents = getValidEvents(user.profile.gcdata, 
+                                                group.events);
+            getSocket(user).send(JSON.stringify({type: "LIST_EVENTS_I_CAN_ATTEND",
+                                                 data: filteredEvents}));
+        }
+        return user;
+    }
 };
 
 //write to use uuids
