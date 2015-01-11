@@ -149,6 +149,7 @@ body{
 	top:5px;
 	left:50px;
 	font-family:"MS Serif", "New York", serif;
+	cursor:default;
 }
 #groupList{
     background-color:#FFFAF0;
@@ -284,4 +285,9 @@ div[contenteditable] {
 }
 #usernameBox {
 	cursor:default;
+}
+#timeSelect {
+	float:left;
+	width:200px;
+	margin:10px;
 }
