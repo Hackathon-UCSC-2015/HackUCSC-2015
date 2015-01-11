@@ -383,6 +383,7 @@ var serverFunctions = { //functions for various commands
         return user;
     },
     "GOOGLE_ID_LOOKUP": function(decoded, user){
+        console.log(decoded);
         getSocket(user).send(
             JSON.stringify({type: "GOOGLE_ID_LOOKUP",
                             data: googleIDFind(users, decoded.data)}));
