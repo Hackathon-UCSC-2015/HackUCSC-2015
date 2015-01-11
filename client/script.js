@@ -94,6 +94,7 @@ function displayEvent(eventID) {
         $('#miniDescription').get(0).addEventListener('input', miniDescriptionCallback);
         $('#description').html(data.description).prop('contentEditable', true);
 		$('#saveButton').show();
+        $('#editButton').hide();
         $('.timePicker').prop('readonly', false);
         $('#startDate').datepick();
         $('#endDate').datepick();
