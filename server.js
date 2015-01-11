@@ -194,6 +194,9 @@ function getGroup(ID){
 var serverFunctions = { //functions for various commands
     //gets an event of a specified id from eventList and sends it as a jsonified
     //string to the user who requested it
+    "ATTENDANCE": function(decoded, user){
+        
+    },
     "LOAD_EVENT": function(decoded, user){
         getSocket(user).send(
             JSON.stringify(
@@ -210,6 +213,7 @@ var serverFunctions = { //functions for various commands
             if (decoded.data.id[0] == 'c'){ //if it's a client id
                 decoded.data.id = group.events.length; //assign an id
                 decoded.data.eventOwner = user.profile.id;
+                //decoded.
                 events.push(decoded.data);
                 group.events.push(decoded.data);
                 console.log("Making new event");
