@@ -96,6 +96,7 @@ function displayEvent(eventID) {
         $('#eventImage').hide();
         $('#welcomeMessage').show();
         $('#timeSelect').hide();
+	    $('#attendance').hide();
         return;
     }
     var data = eventDataByID(eventID);
@@ -116,20 +117,26 @@ function displayEvent(eventID) {
 	}else{
 		$('#numberAttend').html(data.attending.length+" people attending");
 	}
-    $('#attendingUsers > .user').slice(1).remove();
+    $('#attendingUsers > .user').remove();
     serverFunctions["GOOGLE_ID_LOOKUP"] = function(googleUser) {
         var profile = googleUser.profile._json;
-        var newUser = $('#attendingUsers > .user').first().clone().show();
+        var newUser = $('#attendingTemplate').clone().show();
         newUser.children('a').attr('href', profile.link);
         newUser.find('img').attr('src', profile.picture);
-        newUser.find('span').html(profile.name);
+        if(profile.name === undefined || profile.name == "") {
+            newUser.find('span').html("Unknown User");
+        } else {
+            newUser.find('span').html(profile.name);
+        }
         $('#attendingUsers').append(newUser);
     }
+    console.log(data.attending);
     for(var i=0; i<data.attending.length; i++) {
         console.log("Looking up: "+data.attending[i]);
         socket.send(JSON.stringify({type: "GOOGLE_ID_LOOKUP",
                                     data: data.attending[i]}));
     }
+    
     if(data.editing) {
         $('#eventDetails > h2').html(data.name).prop('contentEditable', true);
         $('#eventDetails > h2').get(0).addEventListener('input', headerCallback);
@@ -137,14 +144,20 @@ function displayEvent(eventID) {
         $('#miniDescription').get(0).addEventListener('input', miniDescriptionCallback);
         $('#description').html(data.description).prop('contentEditable', true);
 		$('#saveButton').show();
-        $('.timePicker').prop('readonly', false);
+        $('#timeSelect > input').prop('readonly', false);
         $('#startDate').datepick({dateFormat: "D M dd yyyy"});
         $('#endDate').datepick({dateFormat: "D M dd yyyy"});
 		$('#attendance').hide();
 		$('#attendingUsersWrapper').hide();
 		$('#editButton').hide();
     }else{
+        $('#eventDetails > h2').html(data.name).prop('contentEditable', false);
+        $('#eventDetails > h2').get(0).removeEventListener('input', headerCallback);
+        $('#miniDescription').html(data.miniDescription).prop('contentEditable', false);
+        $('#miniDescription').get(0).removeEventListener('input', miniDescriptionCallback);
+        $('#description').html(data.description).prop('contentEditable', false);
         $('#startDate').datepick('destroy');
+        $('#timeSelect > input').prop('readonly', true);
         $('#endDate').datepick('destroy');
 		$('#attendance').show();
 		$('#attendingUsersWrapper').show();
@@ -249,9 +262,6 @@ $(document).ready(function() {
 		eventDataByID(currentlyViewing).editing = true;
 		displayEvent(currentlyViewing);
 	});
-	
-	$('#saveButton').hide();
-	$('#editButton').hide();
     
     $('#loginButton').click(function() {
         window.location.replace("/auth/google/");

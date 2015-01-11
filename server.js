@@ -249,6 +249,8 @@ var serverFunctions = { //functions for various commands
                 if (group.events[decoded.eventID]){
                     changeAttendance(group.events[decoded.eventID], 
                                      decoded.attendance, user);
+                    console.log("+++++++++++++++++++++++++++++++++++++");
+                    console.log(group);
                     broadcast(group, JSON.stringify(
                         {type: "SAVE_EVENT",
                          data: group.events[decoded.eventID]}));
@@ -468,8 +470,10 @@ wss.on('connection', function(ws){
     ws.on('close', function(code, reason){
         ws.connectionClosed = true;
         var socketID = wss.clients.indexOf(ws);
-        var user = ws.userData
-        users.splice(users.indexOf(user), 1);
+        var user = ws.userData;
+        var userToRemove = getUserByUUID(users, user.id);
+        console.log("REMOVING USER: "+users.indexOf(userToRemove));
+        users.splice(users.indexOf(userToRemove), 1);
         for(var i=0; i<groups[0].users.length; i++) {
             if(groups[0].users[i].id == user.id) {
                 groups[0].users.splice(i, 1);
