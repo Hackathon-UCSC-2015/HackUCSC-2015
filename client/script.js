@@ -239,6 +239,8 @@ $(document).ready(function() {
         }
     }});
     
+    $('#usernameBox').hide();
+    
     
 });
 

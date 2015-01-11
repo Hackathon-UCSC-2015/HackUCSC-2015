@@ -30,7 +30,9 @@ var serverFunctions = { //functions for various commands
     "GOOGLE_ID_LOGIN": function(decoded) {
         console.log(decoded);
         $('#loginButton').hide();
-        
+        $('#usernameBox').show();
+        $('#usernameBox > img').attr('src', decoded.profile._json.picture);
+        $('#usernameBox > span').html(decoded.profile._json.name);
     },
     //the same as above except for schedules
     "LOAD_SCHEDULE": function(decoded){
@@ -64,7 +66,7 @@ socket.onopen = function() {
     socket.send(JSON.stringify(packet));
     console.log("Sent LIST_EVENTS");
     
-    var googleid = getUrlParameter("clientid");
+    var googleid = getUrlParameter("userid");
     if(googleid != undefined) {
         var packet = {};
         packet.type = "GOOGLE_ID_LOGIN";
