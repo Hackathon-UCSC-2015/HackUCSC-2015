@@ -180,7 +180,7 @@ function getUser(userList, fn){
 }
 
 function googleIDFind(userList, googleID){
-    return getuser(userList, function(user){
+    return getUser(userList, function(user){
         return user.profile.id == googleID;
     });
 }
