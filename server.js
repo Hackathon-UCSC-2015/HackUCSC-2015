@@ -308,11 +308,8 @@ var serverFunctions = { //functions for various commands
                         log(1,"They have access to the event");
                         //replace our old event
                         group.events[decoded.data.id] = decoded.data;
-                        getSocket(user).send(JSON.stringify({type: "SAVE_EVENT",
-                                                             data: decoded.data}));
-                        broadcastAllBut(group, JSON.stringify({type: "SAVE_EVENT",
-                                                               data: decoded.data}), 
-                                        user);
+                        broadcastAll(group, JSON.stringify({type: "SAVE_EVENT",
+                                                               data: decoded.data}));
                     } else {
                         log(1,"they have no access");
                         return user;
