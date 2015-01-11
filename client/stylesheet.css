@@ -106,12 +106,12 @@ body{
   background-position: center center;
   background-repeat: no-repeat;
 }
-.plusButton:hover, #saveButton:hover {
+.plusButton:hover, #saveButton:hover, #editButton:hover {
 	color:#3333cc;
 	cursor: pointer;
 }
-.plusButton:active, #saveButton:active {
-	color:#6666ff;
+.plusButton:active, #saveButton:active, #editButton:active {
+	color:#6666ff;	
 	cursor:pointer;
 }
 .statusImage:hover{
