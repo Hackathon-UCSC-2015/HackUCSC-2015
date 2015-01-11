@@ -110,8 +110,8 @@ function displayEvent(eventID) {
         $('#description').html(data.description).prop('contentEditable', true);
 		$('#saveButton').show();
         $('.timePicker').prop('readonly', false);
-        $('#startDate').datepick();
-        $('#endDate').datepick();
+        $('#startDate').datepick({dateFormat: "D M dd yyyy"});
+        $('#endDate').datepick({dateFormat: "D M dd yyyy"});
 		$('#attendance').hide();
 		$('#editButton').hide();
     }else{
