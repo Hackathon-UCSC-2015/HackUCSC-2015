@@ -64,7 +64,7 @@ var request = function(accessToken, refreshToken, profile, done)
     process.nextTick(function() 
     {
 	console.log('here');
-        setProfile(profie.id, profile);
+        setProfile(profile.id, profile);
 	console.log("User Id: "+profile.id);
 	console.log("Display Name: "+profile.displayName);
 	console.log("Email: "+profile.emails);
