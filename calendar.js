@@ -64,8 +64,27 @@ function getGoogleCalendarData(accessToken, userid)
 									
 								}
 								//console.log(formattedData);
-								//user.gcdata = formattedData();
-								//var user 
+								if(formattedData != null && formattedData.length != 0)
+								{
+									console.log('====================== attempting to save data to user ============================');
+								//	console.log(user);
+									//user.gcdata = formattedData;
+									if(user.gcdata == null)
+									{
+
+									//	console.log('was null')
+										user.gcdata = formattedData;
+									}
+									else
+									{
+									//	console.log('not null')
+										user.gcdata.push(formattedData);
+									}
+								//	console.log('after save:')
+								//	console.log(user);
+									
+								}
+								//console.log(user); 
 							}
 							else
 							{
