@@ -138,8 +138,6 @@ function authenticate(user, event){
 }
 
 
-
-var events = [];
 var schedules = [];
 
 //group object
@@ -282,27 +280,39 @@ var serverFunctions = { //functions for various commands
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded, user){
         if (loggedIn(user)){
+            log(1, "USER");
             log(1,user);
+            log(1, "WHOLE PACKET");
+            log(1,decoded);
             var group = getGroup(decoded.data.groupID);
             if (decoded.data.id[0] == 'c'){ //if it's a client id
                 decoded.data.id = group.events.length; //assign an id
                 decoded.data.eventOwner = user.profile.id;
                 decoded.data.attending = [];
                 decoded.data.notAttending = [];
-                events.push(decoded.data);
+                //events.push(decoded.data);
                 group.events.push(decoded.data);
                 log(1,"Making new event");
+                getSocket(user).send(JSON.stringify({type: "SAVE_EVENT",
+                                                     data: decoded.data}));
+                broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
+                                                       data: decoded.data}), user);
             } else { //else we're overwriting a currently saved event
                 log(1,"Overwriting old event");
                 if (group.events[decoded.data.id]){ //if the event exists
                     log(1, "OLD EVENT");
-                    log(1,group.events[decoded.data.id]);
+                    log(1, group.events[decoded.data.id]);
                     log(1, "NEW EVENT");
                     log(1, decoded.data);
                     if (authenticate(user, group.events[decoded.data.id])){
                         log(1,"They have access to the event");
                         //replace our old event
                         group.events[decoded.data.id] = decoded.data;
+                        getSocket(user).send(JSON.stringify({type: "SAVE_EVENT",
+                                                             data: decoded.data}));
+                        broadcastAllBut(group, JSON.stringify({type: "SAVE_EVENT",
+                                                               data: decoded.data}), 
+                                        user);
                     } else {
                         log(1,"they have no access");
                         return user;
@@ -313,10 +323,6 @@ var serverFunctions = { //functions for various commands
                     return user;
                 }
             }
-            getSocket(user).send(JSON.stringify({type: "SAVE_EVENT",
-                                                 data: decoded.data}));
-            broadcastAllBut(group, JSON.stringify({type: "LOAD_EVENT",
-                                                   data: decoded.data}), user);
         } else {
             log(1,"user is not logged in");
         }
@@ -386,7 +392,7 @@ var serverFunctions = { //functions for various commands
     },
     "LIST_EVENTS": function(decoded, user){
         //Give the user all current events
-        events.forEach(function(event) {
+        globalGroup.events.forEach(function(event) {
             getSocket(user).send(JSON.stringify({type: "LOAD_EVENT",
                                                  data: event}));
         });
@@ -506,13 +512,13 @@ wss.on('connection', function(ws){
 //save the schedule and events and groups to file
 function saveAllData(){
     console.log('Beginning save');
-    console.log(events);
+    //console.log(events);
     console.log(schedules);
     console.log(groups);
     console.log(users);
     fs.writeFileSync(__dirname+'/server_files/data',
                      JSON.stringify({
-                         events: events,
+                         //events: events,
                          schedules: schedules,
                          groups: groups,
                          users: users}));
@@ -522,7 +528,7 @@ function saveAllData(){
 //this is basically pointless right now without anything to get it working
 function loadAllData(){
     var data = JSON.parse(readFileSync(__dirname+'/server_files/data', 'utf8'));
-    events = data.events;
+    //events = data.events;
     schedules = data.schedules;
     groups = data.groups;
     users = data.users;
