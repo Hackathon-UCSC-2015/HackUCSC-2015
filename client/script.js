@@ -233,7 +233,7 @@ $(document).ready(function() {
     $('#addEvent').click(function() {
         var newEventData = {};
         newEventData.id = "c"+idCounter++;
-        newEventData.name = "Enter and event name.";
+        newEventData.name = "Enter an event name.";
         newEventData.miniDescription = "Enter a short description.";
         newEventData.description = "Enter a long description here";
 		newEventData.imageName = "images/sampleImages/sampleEvent"+Math.floor(Math.random()*18)+".jpg";
