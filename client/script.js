@@ -146,6 +146,7 @@ function syncSideBarWithData(eventID) {
     });
     newEvent.children('.eventTitle').html(newEventData.name);
     newEvent.children('.eventMiniDescription').html(newEventData.miniDescription);
+	newEvent.children('.littlePerson').html(newEventData.attending.length);
 	if(me){
 		if(newEventData.notAttending.indexOf(me.id)>-1){
 			newEvent.children('.attendStatusImage').attr('src','images/denyDown.png');	
