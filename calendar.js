@@ -18,9 +18,9 @@ function getGoogleCalendarData(accessToken, userid)
 {
 	var googleCalendar = new gcal.GoogleCalendar(accessToken); //The google calendar for a user's access token
 	var user = ser.getUserByGoogleID(userid);
-	console.log('\n\n\nthis is the user login ======================================================')
-	console.log(user);
-	console.log('end user login \n\n')
+	//console.log('\n\n\nthis is the user login ======================================================')
+	//console.log(user);
+	//console.log('end user login \n\n')
 	//var customEvents =[];
 
 	googleCalendar.calendarList.list(
