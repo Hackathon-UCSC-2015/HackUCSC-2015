@@ -97,6 +97,7 @@ function displayEvent(eventID) {
         $('#welcomeMessage').show();
         $('#timeSelect').hide();
 	    $('#attendance').hide();
+		$('#map').hide();
         return;
     }
     var data = eventDataByID(eventID);
@@ -104,14 +105,17 @@ function displayEvent(eventID) {
     $('#welcomeMessage').hide();
     $('#eventImage').show();
     $('#timeSelect').show();
+	$('#map').show();
     $('#eventDetails > h2').html(data.name);
     $('#miniDescription').html(data.miniDescription);
     $('#description').html(data.description);
+	$('#location').val(data.location)
     $('#eventDetails > #eventImage').html('<img id="eventImageImage" src="'+data.imageName+'" />');
 	$('#saveButton').hide();
     $('#editButton').hide();
     $('#startDate').val(data.startTime.toDateString());
     $('#endDate').val(data.endTime.toDateString());
+	updateMap(data.location);
 	if(data.attending.length==1){
 		$('#numberAttend').html("1 person attending");
 	}else{
@@ -225,6 +229,13 @@ function login() {
     $('#addEvent').show();
 }
 
+function updateMap(place){
+	if(place===undefined || place==""){
+		place = "UCSC";
+	}
+	$('#map').attr('src','https://www.google.com/maps/embed/v1/place?q='+place+'&key=AIzaSyAxfOFUkT_m9TKfSjoxQmuB_QI1ZCaXnQw');
+}
+
 var debounce = false;
 var mouseOver = false;
 
@@ -243,6 +254,7 @@ $(document).ready(function() {
         newEventData.endTime = new Date();
 		newEventData.attending = new Array();
 		newEventData.notAttending = new Array();
+		newEventData.location = "";
         events.push(newEventData);
 		
         newEventSidebarFromData(newEventData);
@@ -283,6 +295,12 @@ $(document).ready(function() {
 	}).click(denyEvent);
 	$('#denyText').hide();
 	$('#attendance').hide();
+	$('#map').hide()
+	$('#location').focusout(function(){
+		console.log("Try to update map.");
+		eventDataByID(currentlyViewing).location = $('#location').val();
+		updateMap($('#location').val());
+	});
 	$('#attendingUsersWrapper').hide();
     $('#startTime').timepicker({change: function(time) {
         var data = eventDataByID(currentlyViewing);

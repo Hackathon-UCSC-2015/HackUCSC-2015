@@ -349,3 +349,7 @@ attendingUsername{
 	color:#6666ff;
 	cursor:pointer;
 }
+#map {
+	float:left;
+	margin-top:10px;
+}
