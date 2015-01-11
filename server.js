@@ -293,12 +293,15 @@ var serverFunctions = { //functions for various commands
     },
     "GOOGLE_ID_LOGIN": function(decoded, user){
         var newuser = getUserByGoogleID(decoded.data);
-        getSocket(user).send(
-            JSON.stringify({type: "GOOGLE_ID_LOGIN",
-                            data: newuser}));
-        newuser.socketID = user.socketID;
-        newuser.id = user.id;
-        return newuser;
+        if (newuser){
+            getSocket(user).send(
+                JSON.stringify({type: "GOOGLE_ID_LOGIN",
+                                data: newuser}));
+            newuser.socketID = user.socketID;
+            newuser.id = user.id;
+            return newuser;
+        }
+        return user;
     },
     "GOOGLE_LOOKUP_SET": function(decoded, user){
         var newuser = getUserByGoogleID(decoded.data);
