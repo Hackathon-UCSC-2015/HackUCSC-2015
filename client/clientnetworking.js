@@ -21,12 +21,11 @@ var serverFunctions = { //functions for various commands
     //and sends the whole event back to the client
     "SAVE_EVENT": function(decoded){
         var eventData = eventDataByID(currentlyViewing);
-        eventData = decoded;
+        eventData.id = decoded.id;
         var eventSidebar = eventSidebarElementByID(currentlyViewing);
         eventSidebar.attr('codeID', decoded.id);
-        currentlyViewing = eventData.id;
-        displayEvent(currentlyViewing);
-        syncSideBarWithData(currentlyViewing);
+        eventData.editing = false;
+        displayEvent(eventData.id);
     },
     "GOOGLE_ID_LOGIN": function(decoded) {
         console.log(decoded);
