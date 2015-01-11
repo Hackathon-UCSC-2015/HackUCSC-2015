@@ -34,10 +34,6 @@ function eventDataByID(id) {
     return events[i];
 }
 
-function replaceEvent(event) {
-    var i = eventDataIndexByID(id)
-}
-
 function deleteEvent(eventID) {
     events.splice(eventDataIndexByID(eventID), 1);
     eventSidebarElementByID(eventID).remove();
@@ -83,6 +79,7 @@ function eventSidebarElementByID(id) {
 
 function displayEvent(eventID) {
     var data = eventDataByID(eventID);
+    currentlyViewing = eventID;
     $('#eventDetails > h2').html(data.name);
     $('#miniDescription').html(data.miniDescription);
     $('#description').html(data.description);
