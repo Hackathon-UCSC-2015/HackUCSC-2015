@@ -34,7 +34,10 @@ function getValidEvents(calendar, events)
 
 	for(var i = 0; i < events.length; i++)
 	{
-		var validEvent = {id: events[i].id, valid: true, start: new Date(events[i].startDate), end: new Date(events[i].endDate)};
+		var validEvent = {id: events[i].id, 
+							valid: true, 
+							start: new Date(events[i].startDate), 
+							end: new Date(events[i].endDate)};
 		validEvents.push(validEvent);
 	}
 
