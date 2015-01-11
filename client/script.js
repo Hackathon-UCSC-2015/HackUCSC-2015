@@ -115,7 +115,8 @@ function displayEvent(eventID) {
 		$('#attendance').hide();
 		$('#editButton').hide();
     }else{
-		$('#editButton').show();
+        $('#startDate').datepick('destroy');
+        $('#endDate').datepick('destroy');
 		$('#attendance').show();
         $('#editButton').show();
 	}
