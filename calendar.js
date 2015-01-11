@@ -32,15 +32,15 @@ function getValidEvents(calendar, events)
 	var eventsLength = events.length;
 	var validEvents = [];
 
-	for(int i = 0; i < events.length; i++)
+	for(var i = 0; i < events.length; i++)
 	{
 		var validEvent = {id: events[i].id, valid: true, start: new Date(events[i].startDate), end: new Date(events[i].endDate)};
 		validEvents.push(validEvent);
 	}
 
-	for(int i =0; i < calendarLength; i++)
+	for(var i =0; i < calendarLength; i++)
 	{
-		for(int j = 0; j < eventsLength; j++)
+		for(var j = 0; j < eventsLength; j++)
 		{
 			if(validEvents[i].valid)
 			{
