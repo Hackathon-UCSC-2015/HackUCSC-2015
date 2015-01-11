@@ -57,7 +57,7 @@ var miniDescriptionCallback = function() {
     }
 }
 
-function stopEditing() {
+/*function stopEditing() {
     eventSidebarElementByID(currentlyViewing).children('.statusImage').hide();
     $('#eventDetails > h2').prop('contentEditable', false);
     $('#eventDetails > h2').get(0).removeEventListener('input', headerCallback);
@@ -68,11 +68,10 @@ function stopEditing() {
     eventDataByID(currentlyViewing).editing = false;
 	$('#saveButton').hide(100);
     $('.timePicker').prop('readonly', true);
-    $('#startDate').datepick('destroy');
-    $('#endDate').datepick('destroy');
-	$('#attendance').show();
-	$('#editButton').show();
-}
+    //$('#startDate').datepick('destroy');
+    //$('#endDate').datepick('destroy');
+	//displayEvent(currentlyViewing);
+}*/
 
 function eventSidebarElementByID(id) {
     return $('#eventList').children('div[codeID="'+id+'"]');
@@ -129,31 +128,19 @@ function syncSideBarWithData(eventID) {
     newEvent.children('.statusImage').click(function(){deleteEvent($(this).parent().attr("codeID"));});
     newEvent.children('.eventTitle').html(newEventData.name);
     newEvent.children('.eventMiniDescription').html(newEventData.miniDescription);
-<<<<<<< HEAD
-	/*if(newEventData.attending==0){
-		newEvent.children('.attendStatusImage').hide();
-	}else{
-		if(newEventData.attending==1){
-=======
 	if(me){
 		if(newEventData.notAttending.indexOf(me.id)>-1){
 			newEvent.children('.attendStatusImage').attr('src','images/denyDown.png');	
 			newEvent.children('.attendStatusImage').show();
 		}else if(newEventData.attending.indexOf(me.id)>-1){
->>>>>>> FETCH_HEAD
 			newEvent.children('.attendStatusImage').attr('src','images/confirmDown.png');	
 			newEvent.children('.attendStatusImage').show();				
 		}else{
 			newEvent.children('.attendStatusImage').hide();
 		}
-<<<<<<< HEAD
-		newEvent.children('.attendStatusImage').show();
-	}*/
-=======
 	}else{
 		newEvent.children('.attendStatusImage').hide();
 	}
->>>>>>> FETCH_HEAD
     if(!newEventData.editing)
         newEvent.children('.statusImage').hide();
 }
@@ -174,25 +161,10 @@ function newEventSidebarFromData(newEventData) {
 }
 
 function denyEvent(){
-	eventDataByID(currentlyViewing).notAttending.push(me.id);
-    syncSideBarWithData(currentlyViewing);
 	attend(currentlyViewing, 2, 0);
 }
 
 function confirmEvent(){
-	var eventData = eventDataByID(currentlyViewing);
-	var notAttendingIndex = eventData.notAttending.indexOf(me.id); 
-	var attendingIndex = eventData.attending.indexOf(me.id); 
-	if(notAttendingIndex>-1){
-		console.log("Removing from notAttending array");
-		eventData.notAttending.splice(notAttendingIndex,1)
-	}
-	if(attendingIndex==-1){
-		console.log("Adding to attending array");
-		eventDataByID(currentlyViewing).attending.push(me.id);
-	}
-    syncSideBarWithData(currentlyViewing);
-	save(currentlyViewing);
     attend(currentlyViewing, 1, 0);
 }
 
