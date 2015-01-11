@@ -291,3 +291,20 @@ div[contenteditable] {
 	margin:5px;
 	z-index:3;
 }
+.littlePerson {
+	position:relative;
+	background-image:url(images/littlePerson.png);
+	background-repeat:no-repeat;
+	top:40px;
+	height:20px;
+	padding-left:20px;	
+	color:#ffff33;
+	font-size:18px;
+	text-shadow: 1px 2px #666600;
+}
+#welcomeMessage {
+	text-align:center;
+}
+#calendarPicture {
+	height:350px;
+}
