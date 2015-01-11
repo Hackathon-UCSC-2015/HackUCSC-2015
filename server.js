@@ -1,3 +1,9 @@
+module.exports = {
+getUserByGoogleID: getUserByGoogleID
+
+};
+
+
 //express requires (for hosting server client side bits)
 var express = require('express');
 var app = express();
