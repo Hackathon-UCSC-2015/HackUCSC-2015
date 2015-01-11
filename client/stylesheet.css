@@ -326,8 +326,27 @@ div[contenteditable] {
 	position:fixed;
 	width:300px;
 	overflow-y:scroll;
-	height:300px;
+	height:200px;
 	background-color:ffff99;
 	bottom: 10px;
 	padding:10px;
+}
+attendingUsername{
+	position:fixed;
+	bottom:10px;
+	left:10px;	
+}
+#logout{
+	background-color:#FFF8DC;
+	position:fixed;
+	right:-50px;
+	color:#003300;
+}
+#logout:hover {
+	color:#3333cc;
+	cursor: pointer;
+}
+#logout:active {
+	color:#6666ff;
+	cursor:pointer;
 }

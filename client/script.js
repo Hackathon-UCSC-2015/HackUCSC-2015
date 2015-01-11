@@ -208,7 +208,7 @@ function login() {
     $('#loginButton').hide();
     $('#usernameBox').show();
     $('#usernameBox > img').attr('src', me._json.picture);
-    $('#usernameBox > span').html(me._json.name);
+    $('#usernameBox > #profileName').html(me._json.name);
     $('#addEvent').show();
 }
 
@@ -293,7 +293,16 @@ $(document).ready(function() {
         }
     }});
     
-    $('#usernameBox').hide();
+    $('#usernameBox').hide().hover(function(){
+		$(this).animate({right:"60px"},100);
+		$(this).children("#logout").animate({right:"10px"},100);	
+	},function(){
+		$(this).animate({right:"0px"},100);
+		$(this).children("#logout").animate({right:"-50px"},100);
+	});
+	$('#logout').click(function(){
+		window.location.replace("/index.html");	
+	});
     
     displayEvent(undefined);
 });
